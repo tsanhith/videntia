@@ -2,34 +2,52 @@
 
 **"When one sense isn't enough — fuse them all."**
 
-Videntia is an Agentic AI platform designed to transform "dark data"—unstructured hours of video—into searchable, evidence-grade forensic reports. By fusing sight, sound, and text, Videntia performs a digital autopsy on footage to find the "Exhibit A" moment in seconds.
+Videntia is a local-first, multimodal forensic analysis system that turns long-form video into searchable, evidence-linked findings.
 
-## ⚖️ The Problem
+## What Videntia Does
 
-- [cite_start]**Dark Data:** Hours of footage (meetings, depositions, security) remain unseen and unsearchable[cite: 14, 15].
-- [cite_start]**Context Blindness:** Keyword searches miss micro-expressions, tone, and environmental cues[cite: 21].
-- [cite_start]**Scalability:** Manual review of 3+ hours for one 10-second clip is impossible at scale[cite: 18].
+- Splits video into overlapping forensic segments.
+- Extracts and aligns transcript, speaker, visual, OCR, and metadata signals.
+- Indexes each modality for hybrid retrieval.
+- Runs a multi-agent reasoning loop to verify claims and produce structured reports.
 
-## 🧠 The Agentic Solution
+## Zero-Cost Build Commitment
 
-[cite_start]Unlike "one-shot" AI, Videntia uses a **Multi-Agent Supervisor** architecture built on **LangGraph** to cross-reference modalities and verify evidence[cite: 55, 109, 128].
+This project is designed to be built with **free/open-source software and free-tier infrastructure**:
 
-### The Tech Stack
+- **LLMs:** Ollama local models (`mistral`, `qwen2.5`, `phi3`) or free-tier hosted inference (e.g., Groq).
+- **Speech-to-text:** `faster-whisper` (local).
+- **Diarization:** `pyannote.audio` (free model weights with HF acceptance).
+- **Vision understanding:** BLIP-2, CLIP, LLaVA (open models).
+- **Vector DB:** ChromaDB local persistent mode.
+- **Orchestration:** LangGraph.
+- **Video tooling:** FFmpeg + MoviePy.
 
-- [cite_start]**Logic & Vision:** Gemini 1.5 Flash ("The Lead Detective")[cite: 8, 62].
-- [cite_start]**Audio Intelligence:** OpenAI Whisper ("The Court Reporter")[cite: 9, 67].
-- [cite_start]**Vector Storage:** ChromaDB ("The Evidence Locker")[cite: 10, 72].
-- [cite_start]**Orchestration:** LangGraph ("The Police Chief")[cite: 11, 77].
-- [cite_start]**Processing:** MoviePy / FFmpeg ("The Surgical Tools")[cite: 12, 82].
+See [`docs/FREE_BUILD_PLAN.md`](docs/FREE_BUILD_PLAN.md) for a full student-focused implementation plan with free compute options.
 
-## 🔄 The Detective Workflow
+## Architecture (High-Level)
 
-1. [cite_start]**Ingest & Chunk:** Video is cut into precise 10-second forensic packets[cite: 42].
-2. [cite_start]**Synchronize Senses:** Whisper (ears) and Gemini (eyes) fuse data into one evidence packet[cite: 47].
-3. [cite_start]**Lock Evidence:** Multimodal embeddings are stored for conceptual search[cite: 52].
-4. [cite_start]**Agentic Loop:** The Lead Detective retrieves clips and loops back to resolve contradictions[cite: 57, 110].
+1. **Ingestion Pipeline**
+   - Video segmentation (10s windows, 2s overlap)
+   - Audio transcription + diarization
+   - Keyframe extraction + captioning + OCR
+2. **Multimodal Indexing**
+   - Separate vector collections for text / vision / audio
+   - Metadata-rich segment records for forensic traceability
+3. **Multi-Agent Reasoning Loop**
+   - Lead Detective (orchestration)
+   - Retriever (hybrid RAG)
+   - Verifier (cross-check + contradiction detection)
+   - Memory Manager (session + long-term context)
+   - Report Scribe (JSON + Markdown report output)
 
-## 🚀 Future Roadmap
+## Retrieval Strategy
 
-- Implementing **Semantic Scene Detection** to replace fixed-interval chunking.
-- Integrating **Graph-RAG** for entity-relationship mapping (Person -> Object -> Time).
+- Stage 1: BM25 sparse recall
+- Stage 2: Dense multimodal ANN retrieval
+- Stage 3: Cross-encoder reranking
+- Stage 4: Agentic verification and contradiction scoring
+
+## Current Status
+
+Repository currently contains architecture and planning documentation. Implementation modules can be scaffolded incrementally from the free build plan.
