@@ -6,9 +6,9 @@ Videntia is an Agentic AI platform designed to transform "dark data"—unstructu
 
 ## ⚖️ The Problem
 
-- [cite_start]**Dark Data:** Hours of footage (meetings, depositions, security) remain unseen and unsearchable[cite: 14, 15].
-- [cite_start]**Context Blindness:** Keyword searches miss micro-expressions, tone, and environmental cues[cite: 21].
-- [cite_start]**Scalability:** Manual review of 3+ hours for one 10-second clip is impossible at scale[cite: 18].
+- [cite_start]**Dark Data:** Hours of footage (meetings, depositions, security) remain unseen and unsearchable[cite: 14, 15]
+- [cite_start]**Context Blindness:** Keyword searches miss micro-expressions, tone, and environmental cues[cite: 21]
+- [cite_start]**Scalability:** Manual review of 3+ hours for one 10-second clip is impossible at scale[cite: 18]
 
 ## 🧠 The Agentic Solution
 
