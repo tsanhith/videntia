@@ -50,6 +50,12 @@ chroma/
 *.swo
 *.sublime-workspace
 
+# Test files
+test_*.py
+validate_setup.py
+COLAB_QUICKSTART.py
+*_test.py
+
 # Logs
 *.log
 .phase*.log
