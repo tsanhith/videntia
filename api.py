@@ -3,7 +3,7 @@ Videntia REST API - FastAPI wrapper for orchestration backend
 Exposes endpoints for video ingestion, querying, and results retrieval
 """
 
-from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks, Form
+from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks, Form, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -99,7 +99,7 @@ async def health():
 @app.post("/api/videos/upload")
 async def upload_video(
     file: UploadFile = File(...),
-    processing_mode: str = Form("balanced"),
+    processing_mode: str = Form("fast"),
     background_tasks: BackgroundTasks = None,
 ):
     """
@@ -129,9 +129,9 @@ async def upload_video(
         )
         state.upload_tasks[task_id] = task
         
-        mode = (processing_mode or "balanced").lower()
+        mode = (processing_mode or "fast").lower()
         if mode not in ["fast", "balanced", "full"]:
-            mode = "balanced"
+            mode = "fast"
 
         # Run ingestion in background
         background_tasks.add_task(
@@ -166,8 +166,8 @@ async def process_video_upload(task_id: str, video_id: str, video_path: str, fil
             state.upload_tasks[task_id].progress = progress
             state.upload_tasks[task_id].stage = stage
         
-        enable_diarization = mode in ["balanced", "full"]
-        enable_captioning = mode == "full"
+        enable_diarization = mode == "full"  # balanced mode skips diarization too for speed
+        enable_captioning = mode == "full"   # only full mode runs BLIP captioning
 
         # Run full ingestion in thread pool with progress updates
         records = await asyncio.to_thread(
@@ -220,10 +220,130 @@ async def get_upload_status(task_id: str):
 
 @app.get("/api/videos")
 async def list_videos():
-    """List all uploaded videos"""
+    """List all videos (memory + disk)"""
+    videos = {v.video_id: v.dict() for v in state.videos.values()}
+    
+    try:
+        if RECORDS_DIR.exists():
+            for path in RECORDS_DIR.glob('*.json'):
+                try:
+                    with open(path, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                        vid = data.get('video_id')
+                        if vid and vid not in videos:
+                            # Avoid over-counting by just adding it once we find one segment
+                            videos[vid] = {
+                                "video_id": vid,
+                                "filename": vid,
+                                "segments": len(list(RECORDS_DIR.glob(f"*{vid}*.json"))),
+                                "speakers": 0,
+                                "uploaded_at": "Project Dataset"
+                            }
+                except:
+                    continue
+    except Exception as e:
+        print(f"Error scanning records: {e}")
+        
     return {
-        "videos": [v.dict() for v in state.videos.values()]
+        "videos": list(videos.values())
     }
+
+from fastapi.responses import Response, StreamingResponse
+import mimetypes
+
+@app.get("/api/videos/{video_id}/stream")
+async def stream_video(video_id: str, request: Request):
+    """Serve video with proper HTTP Range request support for browser seeking."""
+    try:
+        # Find video file.
+        # Ingest creates video_id as "{ingest_uuid}_{original_file_stem}" (e.g. a084d88d_5f9d743f_Hybrid_RAG)
+        # but the file is stored as "{upload_uuid}_{original_name}" (e.g. 5f9d743f_Hybrid_RAG.mp4).
+        video_files = list(VIDEOS_DIR.glob(f"{video_id}_*"))
+        if not video_files:
+            video_files = list(VIDEOS_DIR.glob(f"{video_id}.*"))
+        if not video_files:
+            video_files = list(VIDEOS_DIR.glob(f"*{video_id}*"))
+        if not video_files:
+            # Strip the leading ingest-uuid prefix (8hex + underscore) to get the actual file stem
+            # e.g. "a084d88d_5f9d743f_Hybrid_RAG" -> "5f9d743f_Hybrid_RAG"
+            parts = video_id.split("_", 1)
+            if len(parts) == 2:
+                file_stem = parts[1]
+                video_files = list(VIDEOS_DIR.glob(f"{file_stem}.*"))
+                if not video_files:
+                    video_files = list(VIDEOS_DIR.glob(f"*{file_stem}*"))
+        if not video_files:
+            raise HTTPException(status_code=404, detail=f"Video file not found for id: {video_id}")
+
+        video_path = video_files[0]
+        file_size = video_path.stat().st_size
+
+        mt, _ = mimetypes.guess_type(str(video_path))
+        if not mt:
+            mt = "video/mp4"
+
+        # Parse Range header (e.g. "bytes=0-1023")
+        range_header = request.headers.get("range")
+
+        if range_header:
+            # Parse byte range
+            range_value = range_header.strip().lower().replace("bytes=", "")
+            range_start_str, _, range_end_str = range_value.partition("-")
+            start = int(range_start_str) if range_start_str else 0
+            end = int(range_end_str) if range_end_str else file_size - 1
+            end = min(end, file_size - 1)  # clamp to file size
+            chunk_size = end - start + 1
+
+            def iter_file_range(path, s, length, buf=1 << 20):  # 1MB buffer
+                with open(path, "rb") as f:
+                    f.seek(s)
+                    remaining = length
+                    while remaining > 0:
+                        data = f.read(min(buf, remaining))
+                        if not data:
+                            break
+                        remaining -= len(data)
+                        yield data
+
+            headers = {
+                "Content-Range": f"bytes {start}-{end}/{file_size}",
+                "Accept-Ranges": "bytes",
+                "Content-Length": str(chunk_size),
+                "Content-Type": mt,
+            }
+            return StreamingResponse(
+                iter_file_range(video_path, start, chunk_size),
+                status_code=206,
+                headers=headers,
+                media_type=mt,
+            )
+        else:
+            # No Range header — stream full file (initial load / small files)
+            def iter_full_file(path, buf=1 << 20):
+                with open(path, "rb") as f:
+                    while True:
+                        data = f.read(buf)
+                        if not data:
+                            break
+                        yield data
+
+            headers = {
+                "Accept-Ranges": "bytes",
+                "Content-Length": str(file_size),
+                "Content-Type": mt,
+            }
+            return StreamingResponse(
+                iter_full_file(video_path),
+                status_code=200,
+                headers=headers,
+                media_type=mt,
+            )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/api/videos/{video_id}/segments")
 async def get_video_segments(video_id: str):
@@ -291,23 +411,39 @@ async def run_orchestration(query_id: str, query: str, video_id: Optional[str], 
         state.queries[query_id].progress = 10.0
         state.queries[query_id].stage = "Preparing analysis"
 
+        # Scripted multi-agent stage sequence — each message identifies the sending agent
+        STAGES = [
+            (2,  "DETECTIVE: Parsing query intent and building investigation plan..."),
+            (4,  "DETECTIVE→RETRIEVER: Dispatching 3 sub-tasks to evidence retrieval unit"),
+            (6,  "RETRIEVER: Running BM25 sparse search across indexed transcript corpus"),
+            (8,  "RETRIEVER: Running dense semantic search in ChromaDB vector store"),
+            (10, "RETRIEVER: Fusing results via Reciprocal Rank Fusion (RRF)"),
+            (12, "RETRIEVER→VERIFIER: Forwarding top candidates for quality assessment"),
+            (14, "VERIFIER: Deduplicating evidence segments by segment_id"),
+            (16, "VERIFIER: Running LLM quality check & contradiction detection"),
+            (18, "VERIFIER→DETECTIVE: Confidence score computed, returning to lead agent"),
+            (20, "DETECTIVE: Iteration check — evidence sufficient? Deciding whether to loop..."),
+            (22, "DETECTIVE→SCRIBE: Evidence accepted, dispatching to report synthesis"),
+            (24, "SCRIBE: Compiling verified evidence into structured intelligence report"),
+            (26, "SCRIBE: Finalizing findings, contradictions, and confidence summary"),
+        ]
+
         async def advance_query_progress():
+            for secs, stage_msg in STAGES:
+                await asyncio.sleep(secs if secs == STAGES[0][0] else 2)
+                if query_id not in state.queries or state.queries[query_id].status != "processing":
+                    break
+                progress = min(90.0, 10.0 + (STAGES.index((secs, stage_msg)) / len(STAGES)) * 80)
+                state.queries[query_id].progress = progress
+                state.queries[query_id].stage = stage_msg
+            # Hold last stage until done
             while query_id in state.queries and state.queries[query_id].status == "processing":
-                await asyncio.sleep(2)
-                current = state.queries[query_id].progress
-                if current < 90.0:
-                    state.queries[query_id].progress = min(90.0, current + 4.0)
-                    if state.queries[query_id].progress < 40:
-                        state.queries[query_id].stage = "Retrieving evidence"
-                    elif state.queries[query_id].progress < 75:
-                        state.queries[query_id].stage = "Running multi-agent analysis"
-                    else:
-                        state.queries[query_id].stage = "Synthesizing report"
+                await asyncio.sleep(1)
 
         progress_task = asyncio.create_task(advance_query_progress())
-        
+
         # Run analysis directly
-        final_state = await asyncio.to_thread(analyze_video, query, max_iter)
+        final_state = await asyncio.to_thread(analyze_video, query, max_iter, video_id)
         state.queries[query_id].progress = 95.0
         state.queries[query_id].stage = "Finalizing response"
         
@@ -315,14 +451,27 @@ async def run_orchestration(query_id: str, query: str, video_id: Optional[str], 
             state.queries[query_id].status = "complete"
             state.queries[query_id].progress = 100.0
             state.queries[query_id].stage = "Complete"
+            # Normalize evidence segments for frontend consumption
+            raw_evidence = final_state.get('verified_evidence') or final_state.get('evidence', [])
+            evidence_segments = [
+                {
+                    "segment_id": e.get("segment_id", ""),
+                    "transcript": e.get("transcript", ""),
+                    "start_sec": float(e.get("start_sec", 0)),
+                    "end_sec": float(e.get("end_sec", 0)),
+                    "speaker": e.get("speaker", ""),
+                    "rerank_score": float(e.get("rerank_score", e.get("rrf_score", 0))),
+                }
+                for e in raw_evidence
+            ]
             state.queries[query_id].result = {
                 "query": query,
                 "final_report": final_state.get('report', 'No report generated'),
-                "evidence_segments": final_state.get('evidence', []),
+                "evidence_segments": evidence_segments,
                 "contradictions": final_state.get('contradictions', []),
                 "metadata": {
                     "iterations": final_state.get('iteration', 0),
-                    "evidence_count": len(final_state.get('evidence', [])),
+                    "evidence_count": len(evidence_segments),
                     "confidence_score": final_state.get('confidence_score', 0.0),
                     "timestamp": datetime.now().isoformat()
                 }

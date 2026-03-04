@@ -1,0 +1,19 @@
+{
+  "video_id": "a084d88d_5f9d743f_Hybrid_RAG",
+  "segments": [
+    "Welcome to the Agentech Ragh hybrid. We start by initializing the system's brain. The GROC API key powers our Lama 3 logic, while the optional Tavoli key unlocks live web search",
+    "The GROC API key powers our Lama 3 logic, while the optional Tavoli key unlocks live web search for real-time data. Next, we upload our private knowledge, the university IT policy. Before processing, we set the architecture.",
+    "Before processing, we set the architecture. Junk size controls the memory detail and top case sets how many snippets to read. Heading process converts this text into mathematical embeddings.",
+    "Heading process converts this text into mathematical embeddings. Let's test the accuracy. I ask a direct factual question from the document. What is the penalty for hacking systems?",
+    "What is the penalty for hacking systems? The agent instantly identifies this as a rag query. It scans the vector database and retrieves the top three relevant chunks. The similarity graphs below prove exactly where the AI found its facts.",
+    "The similarity graphs below prove exactly where the AI found its facts. No black box guessing here. here. Now for conversational memory. I simply ask, is it harsh? The system understands",
+    "here. Now for conversational memory. I simply ask, is it harsh? The system understands it refers to the penalty we just discussed. Since harshness is an opinion, not a fact in the PDF, the validator switches to logic mode. It uses general knowledge to provide a balance",
+    "the PDF, the validator switches to logic mode. It uses general knowledge to provide a balance perspective instead of forcing a document match. Let's push further. I ask to compare with",
+    "perspective instead of forcing a document match. Let's push further. I ask to compare with with new rules. The system detects that new implies data outside the PDF. It automatically triggers the verb agent to search the live internet for recent updates.",
+    "triggers the verb agent to search the live internet for recent updates. Now, dynamic reconfiguration. I want a deeper analysis of this same document, so I increase the retrieve will count to 4 and deprocess. The system instantly rebuilds the index to",
+    "the retrieve will count to 4 and deprocess. The system instantly rebuilds the index to match this new strategy. I ask a complex technical question about storage limits. Because",
+    "match this new strategy. I ask a complex technical question about storage limits. Because Because of the new setting, the system is forced to hunt down and synthesize for distinct pieces of evidence regarding mailbox thresholds. And there it is.",
+    "And there it is. A detailed answer backed by four separate context chunks. The match quality tags grade the evidence, ensuring you can trust the result. This is the power of a Gentic R8G.",
+    "This is the power of a Gentic R8G."
+  ]
+}

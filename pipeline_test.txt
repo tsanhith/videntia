@@ -1,0 +1,253 @@
+﻿
+===============================================================================
+=
+VIDENTIA ù Forensic Video Analysis
+===============================================================================
+=
+Query: how many voices were heard?
+Max iterations: 1
+Started: 2026-03-04 13:58:29
+
+
+
+Analysis failed: 'charmap' codec can't encode character '\U0001f50d' in 
+position 0: character maps to <undefined>
+.\venv\Scripts\python.e
+xe : Traceback (most 
+recent call last):
+At line:1 char:1
++ .\venv\Scripts\python
+.exe main.py "how many 
+voices were heard?" 
+--max ...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (Traceback (mo   
+ st recent call las    
+t)::String) [], Re    
+moteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\main.py",
+ line 68, in 
+analyze_video
+    final_state = workf
+low.invoke(initial_stat
+e)
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\langgraph
+\pregel\main.py", line 
+3094, in invoke
+    for chunk in 
+self.stream(
+                 
+~~~~~~~~~~~^
+        input,
+        ^^^^^^
+    ...<10 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    ):
+    ^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\langgraph
+\pregel\main.py", line 
+2669, in stream
+    for _ in 
+runner.tick(
+             
+~~~~~~~~~~~^
+        [t for t in 
+loop.tasks.values() if 
+not t.writes],
+        ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
+    ...<2 lines>...
+        schedule_task=l
+oop.accept_push,
+        ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\langgraph
+\pregel\_runner.py", 
+line 167, in tick
+    run_with_retry(
+    ~~~~~~~~~~~~~~^
+        t,
+        ^^
+    ...<10 lines>...
+        },
+        ^^
+    )
+    ^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\langgraph
+\pregel\_retry.py", 
+line 71, in 
+run_with_retry
+    return task.proc.in
+voke(task.input, 
+config)
+           ~~~~~~~~~~~~
+~~~~^^^^^^^^^^^^^^^^^^^
+^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\langgraph
+\_internal\_runnable.py
+", line 656, in invoke
+    input = context.run
+(step.invoke, input, 
+config, **kwargs)
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\langgraph
+\_internal\_runnable.py
+", line 400, in invoke
+    ret = 
+self.func(*args, 
+**kwargs)
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\agents\le
+ad_detective.py", line 
+87, in 
+lead_detective_node
+    print(f"\n[bold 
+blue]\U0001f50d Lead 
+Detective ù Iteration 
+{iteration}[/bold 
+blue]")
+    ~~~~~^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\rich\__in
+it__.py", line 74, in 
+print
+    return write_consol
+e.print(*objects, 
+sep=sep, end=end)
+           ~~~~~~~~~~~~
+~~~~~~~^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\rich\cons
+ole.py", line 1697, in 
+print
+    with self:
+         ^^^^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\rich\cons
+ole.py", line 870, in 
+__exit__
+    self._exit_buffer()
+    ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\rich\cons
+ole.py", line 826, in 
+_exit_buffer
+    
+self._check_buffer()
+    
+~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\rich\cons
+ole.py", line 2042, in 
+_check_buffer
+    
+self._write_buffer()
+    
+~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\rich\cons
+ole.py", line 2078, in 
+_write_buffer
+    legacy_windows_rend
+er(buffer, LegacyWindow
+sTerm(self.file))
+    ~~~~~~~~~~~~~~~~~~~
+~~^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\rich\_win
+dows_renderer.py", 
+line 17, in 
+legacy_windows_render
+    term.write_styled(t
+ext, style)
+    ~~~~~~~~~~~~~~~~~^^
+^^^^^^^^^^^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\rich\_win
+32_console.py", line 
+441, in write_styled
+    
+self.write_text(text)
+    
+~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\abhi\D
+ownloads\project\Agenti
+c_AI\videntia\venv\Lib\
+site-packages\rich\_win
+32_console.py", line 
+402, in write_text
+    self.write(text)
+    ~~~~~~~~~~^^^^^^
+  File "C:\Python313\Li
+b\encodings\cp1252.py",
+ line 19, in encode
+    return codecs.charm
+ap_encode(input,self.er
+rors,encoding_table)[0]
+           ~~~~~~~~~~~~
+~~~~~~~~~^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 
+'charmap' codec can't 
+encode character 
+'\U0001f50d' in 
+position 0: character 
+maps to <undefined>
+During task with name 
+'detective' and id '6b1
+7dc13-d0bc-ada9-f563-c8
+5cf3ecaaba'

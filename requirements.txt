@@ -1,0 +1,47 @@
+# ============================================================================
+# Videntia - Dependencies
+# ============================================================================
+
+# LLM & Agent Orchestration
+langgraph>=0.2.0
+langchain-groq>=0.2.0
+langchain-core>=0.3.0
+
+# Vector Storage & Embeddings
+chromadb>=0.5.18
+sentence-transformers>=3.3.1
+FlagEmbedding>=1.2.11
+
+# Sparse Search
+rank-bm25>=0.2.2
+nltk>=3.9.1
+
+# Speech & Audio
+faster-whisper>=1.1.0
+pyannote.audio>=3.1.0
+
+# Video Processing
+moviepy>=2.1.1
+opencv-python>=4.10.0
+
+# Vision Models
+pillow>=11.0.0
+transformers>=4.46.3
+
+# Core ML
+torch>=2.5.1
+numpy
+scipy
+
+# API & Web
+fastapi>=0.115.0
+uvicorn>=0.32.0
+pydantic>=2.10.3
+httpx
+
+# Database
+supabase
+
+# Utilities
+python-dotenv
+rich>=13.9.4
