@@ -75,9 +75,9 @@ graph TD
     end
 
     subgraph "🗄️ Persistence & Vector Storage"
-        PG[(Supabase PostgreSQL\nRelational Metadata)]:::db
-        CH[(ChromaDB\nDense Vectors)]:::db
-        BM[(BM25 Index\nSparse Search)]:::db
+        PG[("Supabase PostgreSQL <br> Relational Metadata")]:::db
+        CH[("ChromaDB <br> Dense Vectors")]:::db
+        BM[("BM25 Index <br> Sparse Search")]:::db
     end
 
     subgraph "🎬 Data Processing Pipeline (GPU)"
@@ -90,17 +90,17 @@ graph TD
     end
 
     subgraph "🧠 Multi-Agent RAG Orchestrator (LangGraph)"
-        LD["🕵️ Lead Detective\n(Query Decomposer)"]:::agent
-        RA["📦 Retriever Agent\n(Hybrid RAG Engine)"]:::agent
-        VA["✓ Verifier Agent\n(Logic & Relevance Check)"]:::agent
-        SA["📝 Scribe Agent\n(Forensic Report Generator)"]:::agent
+        LD["🕵️ Lead Detective <br> (Query Decomposer)"]:::agent
+        RA["📦 Retriever Agent <br> (Hybrid RAG Engine)"]:::agent
+        VA["✓ Verifier Agent <br> (Logic & Relevance Check)"]:::agent
+        SA["📝 Scribe Agent <br> (Forensic Report Generator)"]:::agent
     end
 
     %% Flow UI to API
-    UI <-->|REST / JSON| API
+    UI <-->|"REST / JSON"| API
     
     %% Flow Ingestion
-    API -->|Uploads Video via Colab/Batch| ING
+    API -->|"Uploads Video via Colab/Batch"| ING
     ING --> VID
     VID --> AUD
     VID --> VIS
@@ -108,23 +108,23 @@ graph TD
     AUD --> FUS
     VIS --> FUS
     DIA --> FUS
-    FUS -->|Persists Metadata| PG
-    FUS -->|Embeds Dense Tensors| CH
-    FUS -->|Indexes Keywords| BM
+    FUS -->|"Persists Metadata"| PG
+    FUS -->|"Embeds Dense Tensors"| CH
+    FUS -->|"Indexes Keywords"| BM
 
     %% Flow Query Execution
-    API <-->|Graph State / Invoke| LD
-    LD -->|Generates Sub-queries| RA
-    RA <-->|Fetches Dense Context| CH
-    RA <-->|Fetches Sparse Context| BM
-    RA <-->|Fetches DB Auth| PG
-    RA -->|Raw Evidence| VA
+    API <-->|"Graph State / Invoke"| LD
+    LD -->|"Generates Sub-queries"| RA
+    RA <-->|"Fetches Dense Context"| CH
+    RA <-->|"Fetches Sparse Context"| BM
+    RA <-->|"Fetches DB Auth"| PG
+    RA -->|"Raw Evidence"| VA
     
     %% Loop & Exit Conditions
-    VA -->|Pass Conditions \n (Confidence ≥ 75%)| SA
-    VA -.->|Fail Conditions \n (Confidence < 75%)| LD
+    VA -->|"Pass Conditions <br> (Confidence ≥ 75%)"| SA
+    VA -.->|"Fail Conditions <br> (Confidence < 75%)"| LD
     
-    SA -->|Final Synthesized Report| API
+    SA -->|"Final Synthesized Report"| API
 ```
 
 ---
@@ -147,25 +147,25 @@ flowchart LR
     classDef struct fill:#0ea5e9,stroke:#0369a1,color:#fff
     classDef storage fill:#f59e0b,stroke:#b45309,color:#fff
 
-    A[Raw Video.mp4]:::input -->|FFmpeg \n 10s intervals| B(Temporal Chunks):::struct
-    B --> C{Multimodal Extraction Node}:::compute
+    A["Raw Video.mp4"]:::input -->|"FFmpeg <br> 10s intervals"| B("Temporal Chunks"):::struct
+    B --> C{"Multimodal Extraction Node"}:::compute
     
-    C -->|Audio Stream| D[faster-whisper \n pyannote]:::compute
-    C -->|Visual Keyframes| E[BLIP-2 Vision Engine]:::compute
-    C -->|Metadata| F[Temporal Context & IDs]:::struct
+    C -->|"Audio Stream"| D["faster-whisper <br> pyannote"]:::compute
+    C -->|"Visual Keyframes"| E["BLIP-2 Vision Engine"]:::compute
+    C -->|"Metadata"| F["Temporal Context & IDs"]:::struct
     
-    D -->|Transcript, Diarization, Tone| G(Fused Chunk Representation):::struct
-    E -->|Scene/Action Caption| G
-    F -->|Timestamps| G
+    D -->|"Transcript, Diarization, Tone"| G("Fused Chunk Representation"):::struct
+    E -->|"Scene/Action Caption"| G
+    F -->|"Timestamps"| G
     
-    G --> H[nomic-embed-text-v1.5 \n (768D Space)]:::compute
-    H -->|Dense Vectors| CH[(ChromaDB)]:::storage
+    G --> H["nomic-embed-text-v1.5 <br> (768D Space)"]:::compute
+    H -->|"Dense Vectors"| CH[("ChromaDB")]:::storage
     
-    G --> I[BM25 Indexed Tokens]:::compute
-    I -->|Sparse Vectors| BM[(BM25 Okapi)]:::storage
+    G --> I["BM25 Indexed Tokens"]:::compute
+    I -->|"Sparse Vectors"| BM[("BM25 Okapi")]:::storage
     
-    G --> J[Relational Mapping]:::compute
-    J -->|Metadata & Foreign Keys| PG[(Supabase PostgreSQL)]:::storage
+    G --> J["Relational Mapping"]:::compute
+    J -->|"Metadata & Foreign Keys"| PG[("Supabase PostgreSQL")]:::storage
 ```
 
 ---
@@ -194,9 +194,9 @@ stateDiagram-v2
     state "✓ Verifier Agent" as VerifierAgent
     state "📝 Scribe Agent" as ScribeAgent
     
-    User --> LeadDetective : Complex Query\n("Did the CFO seem anxious?")
+    User --> LeadDetective : Complex Query <br> (Did the CFO seem anxious?)
     
-    LeadDetective --> RetrieverAgent : Decomposed Sub-queries\n(e.g., "CFO speaking", "Keywords: anxious, sweating")
+    LeadDetective --> RetrieverAgent : Decomposed Sub-queries <br> (e.g. CFO speaking, Keywords anxious sweating)
     
     state RetrieverAgent {
         [*] --> HybridQuery
@@ -205,23 +205,23 @@ stateDiagram-v2
         BM25Sparse --> RRF_Fusion
         SemanticDense --> RRF_Fusion
         RRF_Fusion --> CrossEncoderRerank
-        CrossEncoderRerank --> ContextWindowExpansion : "±1 Chunk"
+        CrossEncoderRerank --> ContextWindowExpansion : ±1 Chunk
         ContextWindowExpansion --> [*]
     }
     
     RetrieverAgent --> VerifierAgent : Proposed Evidence Chunks
     
     state VerifierAgent {
-        [*] --> CheckRelevance : "Does this answer the prompt?"
-        CheckRelevance --> DetectContradictions : "Verify negations ('not anxious')"
-        DetectContradictions --> ScoreConfidence : "Calculate 0-1.0 certainty metric"
+        [*] --> CheckRelevance : Does this answer the prompt?
+        CheckRelevance --> DetectContradictions : Verify negations (not anxious)
+        DetectContradictions --> ScoreConfidence : Calculate 0-1.0 certainty metric
         ScoreConfidence --> [*]
     }
     
-    VerifierAgent --> LeadDetective : Confidence < 75%\n(Refine prompt and retry)
-    VerifierAgent --> ScribeAgent : Confidence ≥ 75%\n(Evidence validated)
+    VerifierAgent --> LeadDetective : Confidence < 75% <br> (Refine prompt and retry)
+    VerifierAgent --> ScribeAgent : Confidence ≥ 75% <br> (Evidence validated)
     
-    ScribeAgent --> User : Generated Forensic Report\n(Includes grounded citations and timestamps)
+    ScribeAgent --> User : Generated Forensic Report <br> (Includes grounded citations and timestamps)
 ```
 
 ---
