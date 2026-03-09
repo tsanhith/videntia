@@ -1,0 +1,75 @@
+# ============================================================================
+# Videntia — Continuous Integration
+# Runs on every push and pull request targeting main
+# ============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # --------------------------------------------------------------------------
+  # Backend — syntax & import checks (no GPU needed)
+  # --------------------------------------------------------------------------
+  backend-lint:
+    name: Backend Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install lint deps
+        run: pip install flake8 python-dotenv
+
+      - name: Flake8 – syntax errors and undefined names only
+        # E9xx = syntax errors, F63x/F7xx = fatal errors, F82x = undefined names
+        run: |
+          flake8 . \
+            --count \
+            --select=E9,F63,F7,F82 \
+            --show-source \
+            --statistics \
+            --exclude=venv,__pycache__,.git,node_modules,data,db,reports
+
+      - name: Verify config module loads
+        run: python -c "import config; print('config.py OK')"
+        env:
+          GROQ_API_KEY: dummy-key-for-ci
+
+  # --------------------------------------------------------------------------
+  # Frontend — TypeScript type-check + production build
+  # --------------------------------------------------------------------------
+  frontend-build:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+        env:
+          # Point to a placeholder so the build doesn't fail on missing env
+          NEXT_PUBLIC_API_URL: http://localhost:8000
