@@ -99,6 +99,8 @@ def bm25_search(query: str, top_k: int = 50, video_id: str | None = None) -> lis
     paired = sorted(zip(ids, scores), key=lambda x: x[1], reverse=True)
 
     if video_id:
-        paired = [p for p in paired if p[0].startswith(video_id)]
+        # Use substring match: ingest video_ids embed the upload video_id
+        # e.g. segment "a084d88d_5f9d743f_example_seg0001" contains upload id "5f9d743f"
+        paired = [p for p in paired if video_id in p[0]]
 
     return paired[:top_k]

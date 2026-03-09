@@ -61,9 +61,13 @@ def dense_search(
 
     query_embedding = embed_text(query)
 
+    # When filtering by video_id, fetch more candidates because many results
+    # will be discarded after the per-segment filter. Without video_id, top_k is enough.
+    fetch_k = min(top_k * 20 if video_id else top_k, collection.count())
+
     query_kwargs = {
         "query_embeddings": [query_embedding],
-        "n_results": min(1000, collection.count()),
+        "n_results": max(1, fetch_k),
         "include": ["documents", "metadatas", "distances"],
     }
 
@@ -79,26 +83,64 @@ def dense_search(
         # ChromaDB cosine distance → similarity score
         score = 1.0 - dist
 
-        if video_id and not seg_id.startswith(video_id):
+        # Use substring match: ingest video_ids embed the upload video_id
+        # e.g. segment "a084d88d_5f9d743f_example_seg0001" contains upload id "5f9d743f"
+        if video_id and video_id not in seg_id:
             continue
+
+        # Normalize metadata: decode JSON-encoded list/dict fields from ChromaDB
+        normalized_meta = _normalize_metadata(meta)
 
         output.append({
             "segment_id": seg_id,
             "text": doc,
             "score": score,
-            "metadata": meta or {},
+            "metadata": normalized_meta,
             # Propagate fields from metadata for downstream use
-            "transcript": meta.get("transcript", doc) if meta else doc,
-            "visual_captions": _parse_list_field(meta, "visual_captions"),
-            "combined_text": meta.get("combined_text", doc) if meta else doc,
-            "start_sec": float(meta.get("start_sec", 0)) if meta else 0.0,
-            "end_sec": float(meta.get("end_sec", 0)) if meta else 0.0,
-            "speaker": meta.get("speaker", "") if meta else "",
+            "transcript": normalized_meta.get("transcript", doc),
+            "visual_captions": _parse_list_field(normalized_meta, "visual_captions"),
+            "combined_text": normalized_meta.get("combined_text", doc),
+            "start_sec": float(normalized_meta.get("start_sec", 0)),
+            "end_sec": float(normalized_meta.get("end_sec", 0)),
+            "speaker": normalized_meta.get("speaker", ""),
         })
 
     # Ensure top_k after post-filtering
     output.sort(key=lambda x: x["score"], reverse=True)
     return output[:top_k]
+
+
+_JSON_LIST_FIELDS = {"visual_captions", "emotions", "visual_emotions"}
+_JSON_DICT_FIELDS = {"emotion_scores", "visual_scores"}
+
+
+def _normalize_metadata(meta: dict | None) -> dict:
+    """
+    Normalize ChromaDB metadata by parsing JSON-encoded list/dict fields
+    back into their Python equivalents.
+
+    ChromaDB requires flat string/int/float/bool metadata values, so list and
+    dict fields are stored as JSON strings and must be decoded on read.
+    """
+    if not meta:
+        return {}
+    import json as _json
+    result = dict(meta)
+    for key in _JSON_LIST_FIELDS:
+        if key in result and isinstance(result[key], str):
+            try:
+                parsed = _json.loads(result[key])
+                result[key] = parsed if isinstance(parsed, list) else []
+            except (ValueError, TypeError):
+                result[key] = []
+    for key in _JSON_DICT_FIELDS:
+        if key in result and isinstance(result[key], str):
+            try:
+                parsed = _json.loads(result[key])
+                result[key] = parsed if isinstance(parsed, dict) else {}
+            except (ValueError, TypeError):
+                result[key] = {}
+    return result
 
 
 def _parse_list_field(meta: dict | None, key: str) -> list[str]:
@@ -174,6 +216,9 @@ def rebuild_dense_index(records) -> None:
             "end_sec": float(end),
             "speaker": speaker,
             "emotions": json.dumps(meta.get("emotions", [])),
+            "emotion_scores": json.dumps(meta.get("emotion_scores", {})),
+            "visual_emotions": json.dumps(meta.get("visual_emotions", [])),
+            "visual_scores": json.dumps(meta.get("visual_scores", {})),
             "emotion_intensity": float(meta.get("emotion_intensity", 0)),
             "avg_emotion_confidence": float(meta.get("avg_emotion_confidence", 0)),
         }

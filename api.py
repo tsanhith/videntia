@@ -443,6 +443,7 @@ async def run_orchestration(query_id: str, query: str, video_id: Optional[str], 
         progress_task = asyncio.create_task(advance_query_progress())
 
         # Run analysis directly
+        print(f"DEBUG: Running analyze_video with query='{query}' and video_id='{video_id}'")
         final_state = await asyncio.to_thread(analyze_video, query, max_iter, video_id)
         state.queries[query_id].progress = 95.0
         state.queries[query_id].stage = "Finalizing response"
@@ -453,17 +454,35 @@ async def run_orchestration(query_id: str, query: str, video_id: Optional[str], 
             state.queries[query_id].stage = "Complete"
             # Normalize evidence segments for frontend consumption
             raw_evidence = final_state.get('verified_evidence') or final_state.get('evidence', [])
-            evidence_segments = [
-                {
-                    "segment_id": e.get("segment_id", ""),
-                    "transcript": e.get("transcript", ""),
-                    "start_sec": float(e.get("start_sec", 0)),
-                    "end_sec": float(e.get("end_sec", 0)),
-                    "speaker": e.get("speaker", ""),
-                    "rerank_score": float(e.get("rerank_score", e.get("rrf_score", 0))),
-                }
-                for e in raw_evidence
-            ]
+
+            # Build a keyword set from the query (ignore short stop words)
+            _stop = {"what","that","this","with","from","about","have","will","they","were",
+                     "the","and","are","was","for","how","did","who","does"}
+            _qwords = {w.lower().strip("?.,!") for w in query.split() if len(w) > 3 and w.lower() not in _stop}
+            def _display_score(e: dict) -> float:
+                raw = min(1.0, float(e.get("rerank_score", e.get("rrf_score", 0))))
+                txt = e.get("transcript", "").lower()
+                # Keyword overlap fraction (0-1)
+                overlap = (sum(1 for w in _qwords if w in txt) / len(_qwords)) if _qwords else 0.0
+                # Small penalty for the first 90 s — usually intro / scene-setting, not answers
+                intro_penalty = 0.85 if float(e.get("start_sec", 0)) < 90 else 1.0
+                return (raw * 0.65 + overlap * 0.35) * intro_penalty
+
+            evidence_segments = sorted(
+                [
+                    {
+                        "segment_id": e.get("segment_id", ""),
+                        "transcript": e.get("transcript", ""),
+                        "start_sec": float(e.get("start_sec", 0)),
+                        "end_sec": float(e.get("end_sec", 0)),
+                        "speaker": e.get("speaker", ""),
+                        "rerank_score": round(_display_score(e), 4),
+                    }
+                    for e in raw_evidence
+                ],
+                key=lambda x: x["rerank_score"],
+                reverse=True,
+            )
             state.queries[query_id].result = {
                 "query": query,
                 "final_report": final_state.get('report', 'No report generated'),

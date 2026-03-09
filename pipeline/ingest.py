@@ -173,15 +173,24 @@ def ingest_video(
 
     # ── Step 3: Visual Captioning (only for 'full' mode) ─────────────────
     if enable_captioning:
-        _progress(60, "Extracting frames and generating captions (full mode)")
+        _progress(60, "Extracting frames (full mode)")
+        all_frame_paths = []
         for i, seg in enumerate(segments):
             seg_id = f"{video_id}_seg{seg['index']:04d}"
             frame_paths = extract_frames(
                 seg["segment_path"], video_id, seg_id, num_frames=3,
             )
-            captions = caption_frames(frame_paths) if frame_paths else []
             seg["frame_paths"] = frame_paths
-            seg["visual_captions"] = captions
+            all_frame_paths.extend(frame_paths)
+            
+        _progress(62, "Generating captions (batch processing)")
+        all_captions = caption_frames(all_frame_paths) if all_frame_paths else []
+        
+        caption_idx = 0
+        for seg in segments:
+            num_frames = len(seg.get("frame_paths", []))
+            seg["visual_captions"] = all_captions[caption_idx:caption_idx + num_frames]
+            caption_idx += num_frames
     else:
         # Skip BLIP model entirely — saves multiple minutes on CPU
         for seg in segments:

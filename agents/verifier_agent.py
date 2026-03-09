@@ -130,7 +130,7 @@ def verifier_agent_node(state: AgentState) -> dict:
     raw_evidence = state.get("evidence", [])
     iteration = state.get("iteration", 0)
 
-    print(f"\n[bold yellow]✓ Verifier Agent — {len(raw_evidence)} raw segments[/bold yellow]")
+    print(f"\n[bold yellow][VER] Verifier Agent -- {len(raw_evidence)} raw segments[/bold yellow]")
 
     # ── Step 1: Enforce diversity ───────────────────────────────────────
     verified = _enforce_diversity(raw_evidence)
@@ -161,11 +161,12 @@ def verifier_agent_node(state: AgentState) -> dict:
         ])
 
         text = response.content.strip()
-        if "```" in text:
-            text = text.split("```")[1]
-            if text.startswith("json"):
-                text = text[4:]
-            text = text.strip()
+        
+        # Robustly extract JSON object containing '{' to '}'
+        start_idx = text.find("{")
+        end_idx = text.rfind("}")
+        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+            text = text[start_idx:end_idx + 1]
 
         result = json.loads(text)
         base_confidence = float(result.get("confidence", 0.5))
@@ -176,7 +177,7 @@ def verifier_agent_node(state: AgentState) -> dict:
         print(f"  Reasoning: {reasoning}")
 
     except Exception as e:
-        print(f"  [red]⚠ LLM error (using heuristic): {e}[/red]")
+        print(f"  [red][!] LLM error (using heuristic): {e}[/red]")
         # Heuristic fallback
         if unique_count >= 3:
             base_confidence = 0.7
@@ -189,7 +190,7 @@ def verifier_agent_node(state: AgentState) -> dict:
     )
 
     if contradictions:
-        print(f"  ⚠ Contradictions: {len(contradictions)}")
+        print(f"  [!] Contradictions: {len(contradictions)}")
         for c in contradictions:
             print(f"    - {c}")
 

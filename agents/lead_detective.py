@@ -84,11 +84,11 @@ def lead_detective_node(state: AgentState) -> dict:
     contradictions = state.get("contradictions", [])
     prev_tasks = state.get("sub_tasks", [])
 
-    print(f"\n[bold blue]🔍 Lead Detective — Iteration {iteration}[/bold blue]")
+    print(f"\n[bold blue][DET] Lead Detective -- Iteration {iteration}[/bold blue]")
 
     # ── Fast-path: already above threshold or max iterations ────────────
     if confidence >= MIN_CONFIDENCE or iteration >= max_iter:
-        print(f"  → Concluding (confidence={confidence:.1%}, iter={iteration})")
+        print(f"  -> Concluding (confidence={confidence:.1%}, iter={iteration})")
         return {
             "detective_notes": f"Concluding at iteration {iteration}, confidence {confidence:.1%}",
             "sub_tasks": prev_tasks,
@@ -114,18 +114,18 @@ def lead_detective_node(state: AgentState) -> dict:
 
         # Parse JSON from response
         text = response.content.strip()
-        # Handle markdown code blocks
-        if "```" in text:
-            text = text.split("```")[1]
-            if text.startswith("json"):
-                text = text[4:]
-            text = text.strip()
+        
+        # Robustly extract JSON object containing '{' to '}'
+        start_idx = text.find("{")
+        end_idx = text.rfind("}")
+        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+            text = text[start_idx:end_idx + 1]
 
         result = json.loads(text)
         sub_tasks = result.get("sub_tasks", [])[:5]  # Cap at 5
         reasoning = result.get("reasoning", "")
 
-        print(f"  → Strategy: {reasoning}")
+        print(f"  -> Strategy: {reasoning}")
         for i, task in enumerate(sub_tasks, 1):
             print(f"    {i}. {task}")
 
@@ -136,7 +136,7 @@ def lead_detective_node(state: AgentState) -> dict:
         }
 
     except Exception as e:
-        print(f"  [red]⚠ LLM error: {e}[/red]")
+        print(f"  [red][!] LLM error: {e}[/red]")
         # Fallback: use query directly as single sub-task
         return {
             "sub_tasks": [query],

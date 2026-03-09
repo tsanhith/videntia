@@ -4,9 +4,23 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
-  ArrowLeft, Send, Terminal, FileText, CheckCircle,
-  Search, Activity, Play, X, Clock, User, ChevronDown, ChevronUp,
-  Shield, Database, Eye, BookOpen
+  ArrowLeft,
+  Send,
+  Terminal,
+  FileText,
+  CheckCircle,
+  Search,
+  Activity,
+  Play,
+  X,
+  Clock,
+  User,
+  ChevronDown,
+  ChevronUp,
+  Shield,
+  Database,
+  Eye,
+  BookOpen,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { queryApi } from "../../../lib/api";
@@ -27,11 +41,20 @@ function timeNow() {
 }
 
 // Parse agent prefix from stage message
-function parseAgent(text: string): { agent: string; arrow: string; rest: string } {
+function parseAgent(text: string): {
+  agent: string;
+  arrow: string;
+  rest: string;
+} {
   const AGENTS = ["DETECTIVE", "RETRIEVER", "VERIFIER", "SCRIBE"];
   for (const agent of AGENTS) {
     const arrowMatch = text.match(new RegExp(`^(${agent})→(\\w+):\\s*(.*)`));
-    if (arrowMatch) return { agent: arrowMatch[1], arrow: arrowMatch[2], rest: arrowMatch[3] };
+    if (arrowMatch)
+      return {
+        agent: arrowMatch[1],
+        arrow: arrowMatch[2],
+        rest: arrowMatch[3],
+      };
     const match = text.match(new RegExp(`^${agent}:\\s*(.*)`));
     if (match) return { agent, arrow: "", rest: match[1] };
   }
@@ -41,15 +64,15 @@ function parseAgent(text: string): { agent: string; arrow: string; rest: string 
 const AGENT_COLORS: Record<string, string> = {
   DETECTIVE: "#818cf8", // indigo
   RETRIEVER: "#34d399", // emerald
-  VERIFIER:  "#fb923c", // orange
-  SCRIBE:    "#60a5fa", // blue
+  VERIFIER: "#fb923c", // orange
+  SCRIBE: "#60a5fa", // blue
 };
 
 const AGENT_ICONS: Record<string, React.ReactNode> = {
   DETECTIVE: <Eye size={11} />,
   RETRIEVER: <Database size={11} />,
-  VERIFIER:  <Shield size={11} />,
-  SCRIBE:    <BookOpen size={11} />,
+  VERIFIER: <Shield size={11} />,
+  SCRIBE: <BookOpen size={11} />,
 };
 
 interface EvidenceSegment {
@@ -78,13 +101,16 @@ export default function QueryPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [finalReport, setFinalReport] = useState<string | null>(null);
-  const [evidenceSegments, setEvidenceSegments] = useState<EvidenceSegment[]>([]);
+  const [evidenceSegments, setEvidenceSegments] = useState<EvidenceSegment[]>(
+    [],
+  );
   const [confidence, setConfidence] = useState<number | null>(null);
   const [showAllSegments, setShowAllSegments] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Video modal state
-  const [watchingSegment, setWatchingSegment] = useState<EvidenceSegment | null>(null);
+  const [watchingSegment, setWatchingSegment] =
+    useState<EvidenceSegment | null>(null);
   const modalVideoRef = useRef<HTMLVideoElement>(null);
   const logsEndRef = useRef<HTMLDivElement>(null);
 
@@ -123,7 +149,16 @@ export default function QueryPage() {
   const addLog = (text: string, active = false, isSystem = false) => {
     setLogs((prev) => {
       const newLogs = prev.map((l) => ({ ...l, active: false }));
-      return [...newLogs, { id: Math.random().toString(), time: timeNow(), text, active, isSystem }];
+      return [
+        ...newLogs,
+        {
+          id: Math.random().toString(),
+          time: timeNow(),
+          text,
+          active,
+          isSystem,
+        },
+      ];
     });
   };
 
@@ -156,13 +191,15 @@ export default function QueryPage() {
         }
       });
 
-      addLog("SCRIBE: Intelligence report compiled. Transmission complete.", false);
+      addLog(
+        "SCRIBE: Intelligence report compiled. Transmission complete.",
+        false,
+      );
       addLog("STATUS: Multi-agent analysis finished", false, true);
 
       setFinalReport(result.result?.final_report || "No report generated.");
       setEvidenceSegments(result.result?.evidence_segments || []);
       setConfidence(result.result?.metadata?.confidence_score ?? null);
-
     } catch (err: any) {
       addLog(`ERROR: ${err.message}`, false, true);
       setError(err.message);
@@ -184,10 +221,23 @@ export default function QueryPage() {
           <Link href={`/analyze/${videoId}`} className={styles.backLink}>
             <ArrowLeft size={16} /> Analysis Timeline
           </Link>
-          <div style={{ fontSize: "1.1rem", fontWeight: 500, color: "var(--text-primary)" }}>
+          <div
+            style={{
+              fontSize: "1.1rem",
+              fontWeight: 500,
+              color: "var(--text-primary)",
+            }}
+          >
             Forensic Query Terminal
           </div>
-          <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontFamily: "var(--font-mono)", marginTop: "4px" }}>
+          <div
+            style={{
+              fontSize: "0.8rem",
+              color: "var(--text-secondary)",
+              fontFamily: "var(--font-mono)",
+              marginTop: "4px",
+            }}
+          >
             TARGET_ID: {videoId}
           </div>
         </div>
@@ -198,7 +248,12 @@ export default function QueryPage() {
             <span>Multi-Agent Event Stream</span>
             <div className={styles.agentLegend}>
               {Object.entries(AGENT_COLORS).map(([name, color]) => (
-                <span key={name} className={styles.legendDot} style={{ color }} title={name}>
+                <span
+                  key={name}
+                  className={styles.legendDot}
+                  style={{ color }}
+                  title={name}
+                >
                   {AGENT_ICONS[name]} {name.slice(0, 3)}
                 </span>
               ))}
@@ -221,13 +276,22 @@ export default function QueryPage() {
                   <span className={styles.logTime}>[{log.time}]</span>
                   {agent ? (
                     <span className={styles.logContent}>
-                      <span className={styles.agentBadge} style={{ color, borderColor: color }}>
+                      <span
+                        className={styles.agentBadge}
+                        style={{ color, borderColor: color }}
+                      >
                         {AGENT_ICONS[agent]} {agent}
                       </span>
                       {arrow && (
                         <>
                           <span className={styles.arrowSep}>→</span>
-                          <span className={styles.agentBadge} style={{ color: AGENT_COLORS[arrow], borderColor: AGENT_COLORS[arrow] }}>
+                          <span
+                            className={styles.agentBadge}
+                            style={{
+                              color: AGENT_COLORS[arrow],
+                              borderColor: AGENT_COLORS[arrow],
+                            }}
+                          >
                             {AGENT_ICONS[arrow]} {arrow}
                           </span>
                         </>
@@ -252,7 +316,11 @@ export default function QueryPage() {
             onChange={(e) => setInputStr(e.target.value)}
             disabled={isProcessing}
           />
-          <button type="submit" className={styles.submitBtn} disabled={isProcessing || !inputStr.trim()}>
+          <button
+            type="submit"
+            className={styles.submitBtn}
+            disabled={isProcessing || !inputStr.trim()}
+          >
             <Send size={18} />
           </button>
         </form>
@@ -271,7 +339,12 @@ export default function QueryPage() {
           {isProcessing && !finalReport && (
             <div className={styles.emptyState}>
               <Activity size={48} color="var(--accent-color)" opacity={0.8} />
-              <div style={{ color: "var(--accent-color)", fontFamily: "var(--font-mono)" }}>
+              <div
+                style={{
+                  color: "var(--accent-color)",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
                 Multi-agent analysis in progress...
               </div>
             </div>
@@ -279,7 +352,9 @@ export default function QueryPage() {
 
           {error && (
             <div className={styles.emptyState}>
-              <div style={{ color: "var(--error-color)" }}>Query Failed: {error}</div>
+              <div style={{ color: "var(--error-color)" }}>
+                Query Failed: {error}
+              </div>
             </div>
           )}
 
@@ -289,17 +364,37 @@ export default function QueryPage() {
               <div className={styles.reportHeader}>
                 <CheckCircle size={28} color="var(--success-color)" />
                 <div style={{ flex: 1 }}>
-                  <h2 style={{ margin: 0, fontSize: "1.4rem", fontWeight: 500 }}>Verified Intelligence Report</h2>
-                  <div style={{ color: "var(--text-secondary)", fontSize: "0.85rem", marginTop: "4px" }}>
+                  <h2
+                    style={{ margin: 0, fontSize: "1.4rem", fontWeight: 500 }}
+                  >
+                    Verified Intelligence Report
+                  </h2>
+                  <div
+                    style={{
+                      color: "var(--text-secondary)",
+                      fontSize: "0.85rem",
+                      marginTop: "4px",
+                    }}
+                  >
                     Generated by Videntia Multi-Agent Engine
                   </div>
                 </div>
                 {confidence !== null && (
-                  <div className={styles.confidenceBadge} title="Agent confidence score">
+                  <div
+                    className={styles.confidenceBadge}
+                    title="Agent confidence score"
+                  >
                     <div className={styles.confLabel}>CONFIDENCE</div>
                     <div
                       className={styles.confValue}
-                      style={{ color: confidence >= 0.6 ? "var(--success-color)" : confidence >= 0.3 ? "#fb923c" : "var(--error-color)" }}
+                      style={{
+                        color:
+                          confidence >= 0.6
+                            ? "var(--success-color)"
+                            : confidence >= 0.3
+                              ? "#fb923c"
+                              : "var(--error-color)",
+                      }}
                     >
                       {(confidence * 100).toFixed(0)}%
                     </div>
@@ -319,27 +414,51 @@ export default function QueryPage() {
                     <h3 className={styles.evidenceTitle}>
                       <Play size={14} />
                       Evidence Segments
-                      <span className={styles.evidenceCount}>{evidenceSegments.length}</span>
+                      <span className={styles.evidenceCount}>
+                        {evidenceSegments.length}
+                      </span>
                     </h3>
-                    <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>
-                      {evidenceSegments.length > TOP_SEGMENTS_DEFAULT && !showAllSegments
+                    <div
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "var(--text-secondary)",
+                      }}
+                    >
+                      {evidenceSegments.length > TOP_SEGMENTS_DEFAULT &&
+                      !showAllSegments
                         ? `Showing top ${TOP_SEGMENTS_DEFAULT} — `
                         : ""}
                       {evidenceSegments.length > TOP_SEGMENTS_DEFAULT && (
-                        <button className={styles.showMoreBtn} onClick={() => setShowAllSegments((v) => !v)}>
-                          {showAllSegments ? <><ChevronUp size={13} /> Show less</> : <><ChevronDown size={13} /> Show all {evidenceSegments.length}</>}
+                        <button
+                          className={styles.showMoreBtn}
+                          onClick={() => setShowAllSegments((v) => !v)}
+                        >
+                          {showAllSegments ? (
+                            <>
+                              <ChevronUp size={13} /> Show less
+                            </>
+                          ) : (
+                            <>
+                              <ChevronDown size={13} /> Show all{" "}
+                              {evidenceSegments.length}
+                            </>
+                          )}
                         </button>
                       )}
                     </div>
                   </div>
                   <div className={styles.evidenceGrid}>
                     {displayedSegments.map((seg, idx) => (
-                      <div key={seg.segment_id || idx} className={styles.evidenceCard}>
+                      <div
+                        key={seg.segment_id || idx}
+                        className={styles.evidenceCard}
+                      >
                         <div className={styles.evidenceCardHeader}>
                           <div className={styles.evidenceMeta}>
                             <span className={styles.evidenceTimestamp}>
                               <Clock size={11} />
-                              {formatTime(seg.start_sec)} – {formatTime(seg.end_sec)}
+                              {formatTime(seg.start_sec)} –{" "}
+                              {formatTime(seg.end_sec)}
                             </span>
                             {seg.speaker && (
                               <span className={styles.evidenceSpeaker}>
@@ -358,15 +477,26 @@ export default function QueryPage() {
                           </button>
                         </div>
                         <p className={styles.evidenceTranscript}>
-                          {seg.transcript || <em style={{ opacity: 0.5 }}>[No transcript]</em>}
+                          {seg.transcript || (
+                            <em style={{ opacity: 0.5 }}>[No transcript]</em>
+                          )}
                         </p>
                         {seg.rerank_score != null && (
                           <div className={styles.evidenceScore}>
                             <div
                               className={styles.scoreBar}
-                              style={{ width: `${Math.min(100, seg.rerank_score * 100)}%` }}
+                              style={{
+                                width: `${Math.min(100, seg.rerank_score * 100)}%`,
+                              }}
                             />
-                            <span>relevance {(seg.rerank_score * 100).toFixed(0)}%</span>
+                            <span>
+                              relevance{" "}
+                              {Math.min(
+                                100,
+                                Math.round(seg.rerank_score * 100),
+                              )}
+                              %
+                            </span>
                           </div>
                         )}
                       </div>
@@ -375,18 +505,29 @@ export default function QueryPage() {
                 </div>
               )}
 
-              <div style={{ marginTop: "40px", paddingTop: "24px", borderTop: "1px solid var(--border-color)", display: "flex", gap: "16px" }}>
-                <Link href={`/analyze/${videoId}`} style={{
-                  padding: "10px 16px",
-                  background: "var(--surface-color)",
-                  border: "1px solid var(--border-color)",
-                  borderRadius: "4px",
-                  color: "var(--text-primary)",
-                  fontSize: "0.9rem",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px"
-                }}>
+              <div
+                style={{
+                  marginTop: "40px",
+                  paddingTop: "24px",
+                  borderTop: "1px solid var(--border-color)",
+                  display: "flex",
+                  gap: "16px",
+                }}
+              >
+                <Link
+                  href={`/analyze/${videoId}`}
+                  style={{
+                    padding: "10px 16px",
+                    background: "var(--surface-color)",
+                    border: "1px solid var(--border-color)",
+                    borderRadius: "4px",
+                    color: "var(--text-primary)",
+                    fontSize: "0.9rem",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
                   <FileText size={16} /> Open Timeline
                 </Link>
               </div>
@@ -397,21 +538,32 @@ export default function QueryPage() {
 
       {/* ── Watch Segment Modal ── */}
       {watchingSegment && (
-        <div className={styles.modalOverlay} onClick={() => setWatchingSegment(null)}>
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setWatchingSegment(null)}
+        >
           <div className={styles.modalBox} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <div>
                 <div className={styles.modalTitle}>Evidence Segment</div>
                 <div className={styles.modalMeta}>
                   <Clock size={12} />
-                  {formatTime(watchingSegment.start_sec)} – {formatTime(watchingSegment.end_sec)}
+                  {formatTime(watchingSegment.start_sec)} –{" "}
+                  {formatTime(watchingSegment.end_sec)}
                   {watchingSegment.speaker && (
-                    <><User size={12} /> {watchingSegment.speaker}</>
+                    <>
+                      <User size={12} /> {watchingSegment.speaker}
+                    </>
                   )}
-                  <span style={{ opacity: 0.5, marginLeft: 4 }}>· Press Esc to close</span>
+                  <span style={{ opacity: 0.5, marginLeft: 4 }}>
+                    · Press Esc to close
+                  </span>
                 </div>
               </div>
-              <button className={styles.modalClose} onClick={() => setWatchingSegment(null)}>
+              <button
+                className={styles.modalClose}
+                onClick={() => setWatchingSegment(null)}
+              >
                 <X size={20} />
               </button>
             </div>
@@ -424,8 +576,19 @@ export default function QueryPage() {
             />
 
             <div className={styles.modalTranscript}>
-              <span style={{ color: "var(--text-secondary)", fontSize: "0.75rem", fontFamily: "var(--font-mono)", textTransform: "uppercase" }}>Transcript</span>
-              <p style={{ margin: "8px 0 0" }}>{watchingSegment.transcript || "[No transcript]"}</p>
+              <span
+                style={{
+                  color: "var(--text-secondary)",
+                  fontSize: "0.75rem",
+                  fontFamily: "var(--font-mono)",
+                  textTransform: "uppercase",
+                }}
+              >
+                Transcript
+              </span>
+              <p style={{ margin: "8px 0 0" }}>
+                {watchingSegment.transcript || "[No transcript]"}
+              </p>
             </div>
           </div>
         </div>

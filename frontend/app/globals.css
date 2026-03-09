@@ -1,17 +1,21 @@
 :root {
-  --bg-color: #0f172a;           /* Deep charcoal */
-  --surface-color: #1e293b;      /* Elevated surface */
+  --bg-color: #0f172a; /* Deep charcoal */
+  --surface-color: #1e293b; /* Elevated surface */
   --surface-hover: #334155;
-  --text-primary: #f8fafc;       /* Crisp white */
-  --text-secondary: #94a3b8;     /* Muted gray */
+  --text-primary: #f8fafc; /* Crisp white */
+  --text-secondary: #94a3b8; /* Muted gray */
   --border-color: #334155;
-  --accent-color: #3b82f6;       /* Blue */
+  --accent-color: #3b82f6; /* Blue */
   --accent-hover: #2563eb;
-  --error-color: #ef4444;        /* Red */
-  --success-color: #10b981;      /* Green */
-  --warning-color: #f59e0b;      /* Yellow */
+  --error-color: #ef4444; /* Red */
+  --success-color: #10b981; /* Green */
+  --warning-color: #f59e0b; /* Yellow */
 
-  --font-mono: 'Roboto Mono', Consolas, monospace;
+  --font-mono: "Roboto Mono", Consolas, monospace;
+}
+
+html {
+  background-color: var(--bg-color);
 }
 
 body {
@@ -37,7 +41,9 @@ button {
   font-family: inherit;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   font-family: inherit;
 }
 

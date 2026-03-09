@@ -8,6 +8,12 @@ Usage:
 
 import sys
 import argparse
+
+# Force UTF-8 output on Windows (fixes emoji/unicode encoding errors with rich)
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 from datetime import datetime
 
 from rich import print
@@ -30,6 +36,8 @@ def analyze_video(query: str, max_iterations: int = MAX_ITERATIONS, video_id: st
         Natural language question about the video.
     max_iterations : int
         Maximum number of investigation loops.
+    video_id : str or None
+        If provided, restrict retrieval to segments from this video.
 
     Returns
     -------

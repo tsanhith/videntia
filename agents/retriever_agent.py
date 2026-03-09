@@ -19,7 +19,7 @@ def retriever_agent_node(state: AgentState) -> dict:
     existing_evidence = state.get("evidence", [])
     existing_ids = {e["segment_id"] for e in existing_evidence}
 
-    print(f"\n[bold green]📦 Retriever Agent — {len(sub_tasks)} sub-tasks[/bold green]")
+    print(f"\n[bold green][RET] Retriever Agent -- {len(sub_tasks)} sub-tasks[/bold green]")
 
     all_evidence = list(existing_evidence)  # Carry forward
 
@@ -37,10 +37,10 @@ def retriever_agent_node(state: AgentState) -> dict:
                     existing_ids.add(seg_id)
                     new_count += 1
 
-            print(f"    → Found {len(results)} results, {new_count} new")
+            print(f"    -> Found {len(results)} results, {new_count} new")
 
         except Exception as e:
-            print(f"    [red]⚠ Retrieval error: {e}[/red]")
+            print(f"    [red][!] Retrieval error: {e}[/red]")
 
     print(f"  Total evidence: {len(all_evidence)} segments")
 

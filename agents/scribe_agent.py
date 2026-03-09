@@ -34,52 +34,44 @@ def _get_llm():
 
 
 # ── Prompts ─────────────────────────────────────────────────────────────────
-SCRIBE_SYSTEM = """You are Videntia's Scribe Agent — a forensic report writer.
+SCRIBE_SYSTEM = """You are Videntia's Scribe Agent — a forensic report writer for video intelligence.
 
-Generate a structured Markdown report answering the user's query based ONLY on the provided evidence.
+Your job is to DIRECTLY ANSWER the user's query using the evidence provided, like a journalist writing a news summary.
 
-CRITICAL RULES FOR ANSWER GROUNDING:
-1. Only make claims DIRECTLY supported by the evidence
-2. Every factual claim MUST cite a specific segment ID and timestamp
-3. Use exact quotes from transcripts when possible
-4. If evidence is ambiguous, explicitly state the ambiguity
-5. For emotion claims, include both transcript AND visual evidence
-6. Flag inferences as "inferred from..." rather than stating as fact
-7. If evidence doesn't fully answer the query, state what's missing
+CRITICAL RULES:
+1. START the Executive Summary by directly answering the query in plain English — do NOT just restate the query.
+2. Key Findings must be actual insights, quotes, and facts — NOT a list of segment IDs.
+3. Use exact quotes from transcripts. Cite ONLY the timestamp (e.g. "2:10–2:20"), not the full segment ID.
+4. Write for a human reader — short, clear sentences.
+5. If the evidence doesn't answer the query, say so clearly in the summary.
+6. Never repeat the query as the summary. Never list segment IDs as findings.
 
 REPORT STRUCTURE:
 ### Executive Summary
-(2-3 sentence answer)
+(2-3 sentences directly answering the query)
 
 ### Key Findings
-(Bullet points with segment citations)
+(Bullet points — real facts/quotes from the video with timestamps)
 
 ### Emotional Context
-(If emotion-related query — confidence scores)
+(What emotions were detected and when — only if relevant)
 
 ### Evidence Details
-(Per-segment breakdown with timestamps)
+(Per-segment breakdown: timestamp | key quote)
 
 ### Contradictions
-(If any detected)
-
----
-**Metadata**
-- Confidence: X%
-- Evidence Segments: N
-- Iterations: N
-- Contradictions: N
+(Any conflicting information found)
 """
 
-SCRIBE_HUMAN = """Query: {query}
+SCRIBE_HUMAN = """Query: "{query}"
 
-Verified Evidence ({count} segments, confidence {confidence:.1%}):
+Evidence from the video ({count} segments, confidence {confidence:.1%}):
 
 {evidence_text}
 
 Contradictions Found: {contradictions}
 
-Generate a complete forensic report following the structure above.
+Write a report that DIRECTLY ANSWERS the query above. The Executive Summary must answer the question in plain English. Key Findings must contain real quotes and facts from the transcripts above — not segment IDs.
 """
 
 
@@ -101,19 +93,16 @@ def _format_evidence(evidence: list[dict]) -> str:
             score = emotion_scores.get(emo, 0)
             emotion_parts.append(f"{emo}({score:.2f})")
 
-        visual_captions = e.get("visual_captions", [])
-        visual_text = " | ".join(visual_captions[:2]) if visual_captions else "none"
+        start = e.get('start_sec', 0)
+        end = e.get('end_sec', 0)
+        start_fmt = f"{int(start)//60}:{int(start)%60:02d}"
+        end_fmt = f"{int(end)//60}:{int(end)%60:02d}"
 
         lines.append(
-            f"Segment {i} ({e.get('segment_id', 'unknown')})\n"
-            f"- Time: {e.get('start_sec', 0):.0f}s-{e.get('end_sec', 0):.0f}s\n"
-            f"- Rerank Score: {e.get('rerank_score', 0):.4f}\n"
+            f"Segment {i} (Time: {start_fmt}–{end_fmt})\n"
             f"- Transcript: {e.get('transcript', '')[:300]}\n"
-            f"- Visual: {visual_text}\n"
             f"- Detected Emotions: {', '.join(emotion_parts) if emotion_parts else 'none'}\n"
-            f"- Visual Emotions: {', '.join(visual_emotions) if visual_emotions else 'none'}\n"
-            f"- Emotion Intensity: {intensity:.2f}\n"
-            f"- Avg Emotion Confidence: {avg_conf:.2f}"
+            f"- Emotion Intensity: {intensity:.2f} | Avg Confidence: {avg_conf:.2f}"
         )
     return "\n\n".join(lines)
 
@@ -134,7 +123,7 @@ def scribe_agent_node(state: AgentState) -> dict:
     # Limit to top 12 segments to prevent LLM context/rate limit errors
     top_segments = verified[:12]
 
-    print(f"\n[bold magenta]📝 Scribe Agent — Generating report on top {len(top_segments)} segments[/bold magenta]")
+    print(f"\n[bold magenta][SCR] Scribe Agent -- Generating report on top {len(top_segments)} segments[/bold magenta]")
 
     evidence_text = _format_evidence(top_segments)
     contra_text = "\n".join(f"- {c}" for c in contradictions) if contradictions else "None"
@@ -154,7 +143,7 @@ def scribe_agent_node(state: AgentState) -> dict:
         ])
         report = response.content.strip()
     except Exception as e:
-        print(f"  [red]⚠ LLM error: {e}[/red]")
+        print(f"  [red][!] LLM error: {e}[/red]")
         import traceback
         traceback.print_exc()
         # Fallback: generate a basic report
@@ -173,7 +162,7 @@ def scribe_agent_node(state: AgentState) -> dict:
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     report_path = REPORTS_DIR / f"analysis_{timestamp}.md"
     report_path.write_text(report, encoding="utf-8")
-    print(f"  → Saved: {report_path}")
+    print(f"  -> Saved: {report_path}")
 
     return {
         "report": report,
@@ -188,23 +177,47 @@ def _fallback_report(
     contradictions: list[str],
     iteration: int,
 ) -> str:
-    """Generate a basic report when LLM is unavailable."""
+    """Generate a readable report from evidence when LLM is unavailable."""
+    top = sorted(evidence, key=lambda x: x.get("rerank_score", 0), reverse=True)[:8]
+
+    # Find the segment whose transcript best overlaps with query keywords
+    query_words = set(query.lower().split())
+    stop = {"the", "a", "an", "is", "are", "was", "what", "how", "who", "did", "about", "and", "or", "in", "of", "to"}
+    query_words -= stop
+
+    best = max(
+        top,
+        key=lambda e: sum(1 for w in query_words if w in e.get("transcript", "").lower()),
+        default=top[0] if top else {},
+    )
+
+    best_start = best.get("start_sec", 0)
+    best_fmt = f"{int(best_start)//60}:{int(best_start)%60:02d}"
+    best_transcript = best.get("transcript", "").strip()
+
+    findings = []
+    for e in top:
+        start = e.get("start_sec", 0)
+        end = e.get("end_sec", 0)
+        start_fmt = f"{int(start)//60}:{int(start)%60:02d}"
+        end_fmt = f"{int(end)//60}:{int(end)%60:02d}"
+        transcript = e.get("transcript", "").strip()
+        if transcript:
+            findings.append(f"- **{start_fmt}\u2013{end_fmt}:** \"{transcript}\"")
+
+    findings_text = "\n".join(findings) if findings else "- No transcript evidence found."
+
     lines = [
-        f"### Executive Summary",
-        f"Analysis of query: \"{query}\"",
+        "### Executive Summary",
+        f"The video addresses: *\"{query}\"*",
         f"",
-        f"### Key Findings",
+        f"The most relevant moment is at **{best_fmt}**: \"{best_transcript[:250]}\"",
+        f"",
+        "### Key Findings",
+        findings_text,
+        f"",
+        "### Contradictions",
+        "\n".join(f"- {c}" for c in contradictions) if contradictions else "No contradictions detected.",
     ]
-
-    for i, e in enumerate(evidence[:5], 1):
-        seg_id = e.get("segment_id", "unknown")
-        transcript = e.get("transcript", "")[:150]
-        time_range = f"{e.get('start_sec', 0):.0f}s-{e.get('end_sec', 0):.0f}s"
-        lines.append(f"- **Segment {i}** ({seg_id}, {time_range}): \"{transcript}...\"")
-
-    if contradictions:
-        lines.append(f"\n### Contradictions")
-        for c in contradictions:
-            lines.append(f"- {c}")
 
     return "\n".join(lines)

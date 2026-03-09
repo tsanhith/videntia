@@ -115,30 +115,53 @@ def caption_frames(frame_paths: list[str]) -> list[str]:
         return [f"a forensic image showing frame {i}" for i in range(len(frame_paths))]
 
 
-def _caption_with_blip(frame_paths: list[str]) -> list[str]:
-    """Generate captions using cached BLIP model."""
+def _caption_with_blip(frame_paths: list[str], batch_size: int = 16) -> list[str]:
+    """Generate captions using cached BLIP model with batched inference."""
     from PIL import Image
     import torch
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     processor, model = _get_blip()
 
-    captions = []
-    for path in frame_paths:
+    all_captions = []
+    for i in range(0, len(frame_paths), batch_size):
+        batch_paths = frame_paths[i:i + batch_size]
+        images = []
+        valid_indices = []
+        
+        for idx, path in enumerate(batch_paths):
+            try:
+                img = Image.open(path).convert("RGB")
+                images.append(img)
+                valid_indices.append(idx)
+            except Exception:
+                pass
+                
+        if not images:
+            all_captions.extend(["a forensic image (caption unavailable)"] * len(batch_paths))
+            continue
+            
         try:
-            image = Image.open(path).convert("RGB")
             inputs = processor(
-                image,
-                text="a forensic image showing",
+                images=images,
+                text=["a forensic image showing"] * len(images),
                 return_tensors="pt",
+                padding=True,
             ).to(device)
 
             with torch.no_grad():
-                output = model.generate(**inputs, max_new_tokens=50)
+                outputs = model.generate(**inputs, max_new_tokens=50)
 
-            caption = processor.decode(output[0], skip_special_tokens=True)
-            captions.append(caption)
-        except Exception:
-            captions.append("a forensic image (caption unavailable)")
+            decoded = processor.batch_decode(outputs, skip_special_tokens=True)
+            
+            # Map back to original indices in case some images failed
+            batch_captions = ["a forensic image (caption unavailable)"] * len(batch_paths)
+            for j, valid_idx in enumerate(valid_indices):
+                batch_captions[valid_idx] = decoded[j].strip()
+                
+            all_captions.extend(batch_captions)
+        except Exception as e:
+            print(f"  [yellow]⚠ Batch captioning failed: {e}[/yellow]")
+            all_captions.extend(["a forensic image (caption unavailable)"] * len(batch_paths))
 
-    return captions
+    return all_captions

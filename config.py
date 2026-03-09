@@ -32,7 +32,7 @@ for d in [VIDEOS_DIR, FRAMES_DIR, SEGMENTS_DIR, TRANSCRIPTS_DIR,
 # LLM (Groq)
 # ============================================================================
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "llama-3.1-8b-instant"  # 500K tokens/day free (vs 100K for 70b)
 
 # ============================================================================
 # HuggingFace

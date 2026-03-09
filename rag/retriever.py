@@ -36,14 +36,31 @@ from config import (
 
 # -- Synonym Map -------------------------------------------------------------
 SYNONYM_MAP = {
+    # Emotions
     "surprised": "surprised shocked stunned astonished amazed",
     "shocked": "shocked surprised stunned astonished",
     "laughed": "laughed chuckled giggled amused cracked up",
     "happy": "happy joyful excited pleased delighted",
     "sad": "sad upset disappointed dejected",
     "angry": "angry furious mad annoyed irritated",
-    "worried": "worried concerned anxious nervous",
+    "worried": "worried concerned anxious nervous uneasy",
     "confused": "confused puzzled perplexed baffled",
+    "celebrating": "celebrating cheering jubilant rejoicing",
+    "fearful": "fearful scared afraid frightened terrified",
+    # Political / conflict content
+    "war": "war conflict strikes bombing military attack",
+    "strikes": "strikes bombing attacks airstrikes military operations",
+    "control": "control domination regime change occupation",
+    "strategy": "strategy plan approach tactic policy",
+    "survival": "survival resistance endurance withstand",
+    "casualties": "casualties deaths civilian victims killed",
+    "sanctions": "sanctions pressure economic punishment penalties",
+    "nuclear": "nuclear program weapons missile proliferation",
+    "iran": "iran iranian tehran regime irgc",
+    "trump": "trump administration washington us policy",
+    "allies": "allies partners regional countries arab gulf",
+    "civilian": "civilian population people public citizens",
+    "resistance": "resistance opposition fighting back pushback",
 }
 
 
@@ -55,15 +72,18 @@ def detect_query_type(query: str) -> dict:
     emotion_kw = [
         "emotion", "feel", "react", "surprise", "laugh", "concern",
         "expression", "facial", "shocked", "angry", "happy", "sad",
-        "disbelief", "worried", "crying",
+        "disbelief", "worried", "crying", "fear", "celebrate", "celebrating",
+        "sentiment", "mood", "attitude", "opinion",
     ]
     temporal_kw = [
         "before", "after", "when", "during", "then", "next",
-        "sequence", "immediately", "timeline",
+        "sequence", "immediately", "timeline", "first", "later",
+        "eventually", "initially", "at the start", "at the end",
     ]
     speaker_kw = [
         "who", "speaker", "person", "says", "said",
-        "mentioned", "stated", "told",
+        "mentioned", "stated", "told", "according", "bahman",
+        "host", "interviewer", "analyst", "expert",
     ]
 
     return {
@@ -76,13 +96,16 @@ def detect_query_type(query: str) -> dict:
 
 # -- Query Expansion ---------------------------------------------------------
 def expand_query(query: str) -> str:
-    """Expand query with emotion synonyms for BM25 recall."""
-    expanded = query
+    """Expand query with synonyms for BM25 recall (single match → expand)."""
+    q_lower = query.lower()
+    expansions = []
     for word, synonyms in SYNONYM_MAP.items():
-        if word in query.lower():
-            expanded = expanded + " " + synonyms
-            break
-    return expanded
+        if word in q_lower:
+            expansions.append(synonyms)
+
+    if expansions:
+        return query + " " + " ".join(expansions)
+    return query
 
 
 # -- RRF Fusion --------------------------------------------------------------
@@ -230,7 +253,7 @@ def hybrid_retrieve(query: str, top_k: int = 8, video_id: str | None = None) -> 
         print(f"  Loading {len(missing_ids)} BM25-only segments from disk records")
         try:
             from pipeline.ingest import load_records
-            disk_records = load_records()
+            disk_records = load_records(video_id=video_id)
             for rec in disk_records:
                 if rec.segment_id in missing_ids:
                     all_segments[rec.segment_id] = {

@@ -1,29 +1,36 @@
 """
-Cross-Encoder Reranker — BAAI/bge-reranker-v2-m3.
+Cross-Encoder Reranker — cross-encoder/ms-marco-MiniLM-L-6-v2.
 
-Provides a singleton reranker that scores (query, passage) pairs
-with a cross-encoder model for precision ranking.
+Uses transformers directly (no sentence-transformers / datasets dependency).
+Scores are sigmoid-normalized to 0-1 range.
+GPU-accelerated via CUDA when available.
 
 Fallback: if the model is unavailable, ranks by rrf_score instead.
 """
 
 from __future__ import annotations
 
-from config import RERANKER_MODEL_NAME
+import math
+import torch
+
+RERANKER_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 # -- Singleton ---------------------------------------------------------------
-_reranker = None
+_model = None
+_tokenizer = None
 
 
 def _get_reranker():
-    global _reranker
-    if _reranker is None:
-        from FlagEmbedding import FlagReranker
-        _reranker = FlagReranker(
-            RERANKER_MODEL_NAME,
-            use_fp16=True,
-        )
-    return _reranker
+    global _model, _tokenizer
+    if _model is None:
+        from transformers import AutoTokenizer, AutoModelForSequenceClassification
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        _tokenizer = AutoTokenizer.from_pretrained(RERANKER_MODEL_NAME)
+        _model = AutoModelForSequenceClassification.from_pretrained(RERANKER_MODEL_NAME)
+        _model = _model.to(device)
+        _model.eval()
+        print(f"  [green]Reranker loaded on {device.upper()}[/green]")
+    return _model, _tokenizer
 
 
 def rerank(
@@ -56,15 +63,37 @@ def rerank(
         return []
 
     try:
-        model = _get_reranker()
-        pairs = [[query, c.get(text_key, c.get("transcript", ""))] for c in candidates]
-        scores = model.compute_score(pairs, normalize=True)
+        model, tokenizer = _get_reranker()
+        texts = [c.get(text_key, c.get("transcript", "")) for c in candidates]
+        device = next(model.parameters()).device
 
-        # compute_score returns a single float for a single pair
-        if isinstance(scores, (int, float)):
-            scores = [scores]
+        # Tokenize all (query, passage) pairs in one batch
+        inputs = tokenizer(
+            [query] * len(texts),
+            texts,
+            padding=True,
+            truncation=True,
+            max_length=512,
+            return_tensors="pt",
+        )
+        inputs = {k: v.to(device) for k, v in inputs.items()}
 
-        for candidate, score in zip(candidates, scores):
+        with torch.no_grad():
+            logits = model(**inputs).logits.squeeze(-1)
+
+        # Min-max normalize across the batch so the best result = 1.0, worst = 0.0.
+        # This gives meaningful relative relevance for display and confidence scoring.
+        raw = logits.cpu().float()
+        lo, hi = raw.min().item(), raw.max().item()
+        if hi > lo:
+            normalized = ((raw - lo) / (hi - lo)).tolist()
+        else:
+            normalized = [0.5] * len(candidates)
+
+        if isinstance(normalized, float):
+            normalized = [normalized]
+
+        for candidate, score in zip(candidates, normalized):
             candidate["rerank_score"] = float(score)
 
         ranked = sorted(candidates, key=lambda x: x["rerank_score"], reverse=True)
