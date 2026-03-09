@@ -69,7 +69,8 @@ jobs:
         run: npm run lint
 
       - name: Build
+        # NEXT_LINT=false skips the redundant ESLint pass Next.js runs during build
         run: npm run build
         env:
-          # Point to a placeholder so the build doesn't fail on missing env
           NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXT_DISABLE_ESLINT_PLUGIN: "true"
