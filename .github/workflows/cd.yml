@@ -1,9 +1,10 @@
 # ============================================================================
 # Videntia — Continuous Deployment
 # Runs only when changes land on main
-# ============================================================================
 #
-# Required GitHub Secrets:
+# Jobs are skipped (not failed) when secrets are not yet configured.
+#
+# Required GitHub Secrets (Settings → Secrets → Actions):
 #   VERCEL_TOKEN       — from https://vercel.com/account/tokens
 #   VERCEL_ORG_ID      — from .vercel/project.json after `vercel link`
 #   VERCEL_PROJECT_ID  — from .vercel/project.json after `vercel link`
@@ -21,13 +22,13 @@ on:
 jobs:
   # --------------------------------------------------------------------------
   # Deploy frontend to Vercel
-  # NOTE: If you already have Vercel's GitHub integration enabled (auto-deploy),
-  # you can delete this job — Vercel will deploy automatically on every push.
+  # Skipped automatically if VERCEL_TOKEN secret is not set.
   # --------------------------------------------------------------------------
   deploy-frontend:
     name: Deploy Frontend → Vercel
     runs-on: ubuntu-latest
-    environment: production
+    # Only run when the secret exists
+    if: ${{ secrets.VERCEL_TOKEN != '' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -47,24 +48,26 @@ jobs:
 
       - name: Deploy to Vercel (production)
         working-directory: frontend
-        run: vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
         env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: vercel deploy --prod --yes --token="$VERCEL_TOKEN"
 
   # --------------------------------------------------------------------------
   # Deploy backend to Hugging Face Spaces
-  # HF Spaces works like a git remote — we push and HF rebuilds the Space.
+  # Skipped automatically if HF_TOKEN secret is not set.
   # --------------------------------------------------------------------------
   deploy-backend:
     name: Deploy Backend → HF Spaces
     runs-on: ubuntu-latest
-    environment: production
+    # Only run when the secret exists
+    if: ${{ secrets.HF_TOKEN != '' }}
 
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # full history so HF gets a clean push
+          fetch-depth: 0
 
       - name: Configure git identity
         run: |
@@ -76,9 +79,6 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_SPACE_NAME: ${{ secrets.HF_SPACE_NAME }}
         run: |
-          # Add HF Space as a remote (auth via token in URL)
           git remote add huggingface \
             "https://user:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE_NAME}"
-
-          # Force-push main → HF Space triggers a redeploy
           git push huggingface main --force
