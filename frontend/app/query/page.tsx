@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { queryApi } from "@/lib/api";
 
-export default function QueryPage() {
+function QueryPageInner() {
   const searchParams = useSearchParams();
   const videoId = searchParams.get("video");
 
@@ -319,3 +319,11 @@ const styles = {
     fontSize: "1.1em",
   } as React.CSSProperties,
 };
+
+export default function QueryPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <QueryPageInner />
+    </Suspense>
+  );
+}
