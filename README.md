@@ -47,7 +47,7 @@ The backend runs on **FastAPI + ChromaDB + BM25**, the LLM is **Groq (Llama 3.1 
 
 ## The Problem & Our Solution
 
-### The Challenge of "Dark Data"
+### The Challenge of "Dark Data".
 
 | Challenge                  | Impact                                                                                       |
 | -------------------------- | -------------------------------------------------------------------------------------------- |
