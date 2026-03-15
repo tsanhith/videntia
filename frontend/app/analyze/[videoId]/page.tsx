@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Play, Pause, FastForward, Activity, MessageSquare } from "lucide-react";
-import { videosApi } from "../../../lib/api";
+import { API_BASE, videosApi } from "../../../lib/api";
 import styles from "./analyze.module.css";
 
 function formatTime(seconds: number) {
@@ -109,7 +109,7 @@ export default function AnalyzePage() {
                 className={styles.realVideoPlayer}
                 onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
              >
-                <source src={`http://localhost:8000/api/videos/${videoId}/stream`} type="video/mp4" />
+                <source src={`${API_BASE}/api/videos/${videoId}/stream`} type="video/mp4" />
                 Your browser does not support HTML video.
              </video>
         </div>
