@@ -23,10 +23,9 @@ import {
   BookOpen,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { queryApi } from "../../../lib/api";
+import { API_BASE, queryApi } from "../../../lib/api";
 import styles from "./query.module.css";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const TOP_SEGMENTS_DEFAULT = 5;
 
 function formatTime(seconds: number) {
