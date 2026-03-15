@@ -1,7 +1,8 @@
 """Vercel FastAPI entrypoint.
 
-Exposes `app` at a conventional module path (`app.py`) so platforms that
-auto-detect ASGI apps can import `app:app` reliably.
+Keep an explicit module-level `app` assignment for platform autodetection.
 """
 
-from api import app
+from api import app as fastapi_app
+
+app = fastapi_app
