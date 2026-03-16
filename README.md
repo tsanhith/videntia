@@ -1,4 +1,4 @@
-# Videntia — Multimodal Forensic Video Intelligence
+# Videntia — Multimodal Forensic Video Intelligence.
 
 <p align="center">
   <em>"When one sense isn't enough — fuse them all."</em>
