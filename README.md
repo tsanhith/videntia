@@ -326,11 +326,11 @@ python main.py "What strategies were discussed?" --max-iter 3
 
 ## Roadmap
 
-- [ ] Streaming real-time ingestion (RTMP/HLS)
-- [ ] Knowledge Graph RAG (entity relationship mapping)
-- [ ] Intelligent scene boundary detection (replace fixed 10s chunks)
-- [ ] Multi-video cross-analysis queries
-- [ ] Desktop app packaging (Electron + PyInstaller)
+- [ ] Streaming real-time ingestion (RTMP/HLS).
+- [ ] Knowledge Graph RAG (entity relationship mapping).
+- [ ] Intelligent scene boundary detection (replace fixed 10s chunks).
+- [ ] Multi-video cross-analysis queries.
+- [ ] Desktop app packaging (Electron + PyInstaller).
 
 ---
 
