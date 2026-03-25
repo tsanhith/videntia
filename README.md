@@ -1,4 +1,4 @@
-# Videntia — Multimodal Forensic Video Intelligence
+# Videntia — Multimodal Forensic Video Intelligence.
 
 <p align="center">
   <em>"When one sense isn't enough — fuse them all."</em>
@@ -47,7 +47,7 @@ The backend runs on **FastAPI + ChromaDB + BM25**, the LLM is **Groq (Llama 3.1 
 
 ## The Problem & Our Solution
 
-### The Challenge of "Dark Data"
+### The Challenge of "Dark Data".
 
 | Challenge                  | Impact                                                                                       |
 | -------------------------- | -------------------------------------------------------------------------------------------- |
@@ -112,6 +112,137 @@ python -c "from pipeline.ingest import ingest_video; ingest_video('data/videos/v
 ```
 
 ---
+
+## Detailed Architecture Flowchart
+
+```mermaid
+flowchart TD
+
+    A[User provides input] --> B{Input type?}
+    B -->|Full video file| C[Full Video Ingestion Pipeline]
+    B -->|NoteGPT timestamp transcript + optional video ref| D[Transcript Ingestion Pipeline]
+
+    subgraph FULL_INGEST[Path A -- Full Video Ingestion]
+        C --> C1[Split video into 10-second chunks with FFmpeg]
+        C1 --> C2[Transcribe full video once with Whisper]
+        C2 --> C3[Map transcript text back to each 10s segment by timestamp overlap]
+        C3 --> C4{Captioning enabled?}
+        C4 -->|Yes| C5[Extract frames from each segment]
+        C5 --> C6[Generate visual captions with BLIP-2]
+        C4 -->|No| C7[Skip visual captioning]
+        C6 --> C8[Extract emotion signals from transcript + visual captions]
+        C7 --> C8
+        C8 --> C9{Diarization enabled?}
+        C9 -->|Yes| C10[Run speaker diarization and assign speaker labels]
+        C9 -->|No| C11[Skip speaker detection]
+        C10 --> C12[Build SegmentRecord]
+        C11 --> C12
+    end
+
+    subgraph NOTEGPT_INGEST[Path B -- NoteGPT Transcript Ingestion]
+        D --> D1[Parse HH:MM:SS transcript blocks]
+        D1 --> D2[Infer end times for each block]
+        D2 --> D3[Create overlapping windows: 30s window / 15s stride]
+        D3 --> D4[Join all text overlapping each window]
+        D4 --> D5[Extract emotion signals from transcript text]
+        D5 --> D6[Build SegmentRecord]
+    end
+
+    subgraph RECORD_LAYER[Record Formation]
+        C12 --> E1[Create unique segment_id and video_id]
+        D6 --> E1
+        E1 --> E2[Store timing info: start_sec / end_sec]
+        E2 --> E3[Store transcript]
+        E3 --> E4[Store visual captions if available]
+        E4 --> E5[Store speaker if available]
+        E5 --> E6[Store emotion metadata: detected emotions, scores, intensity]
+        E6 --> E7[Create combined_text]
+        E7 --> E8[combined_text = transcript + visual cues + emotion tags or time labels]
+        E8 --> E9[Save each SegmentRecord as JSON in data/records]
+    end
+
+    subgraph INDEXING[Index Building]
+        E9 --> F1[Load all saved records]
+        F1 --> F2[Build BM25 sparse index from combined_text]
+        F1 --> F3[Build dense text embeddings from combined_text]
+        F1 --> F4{Visual captions exist?}
+        F4 -->|Yes| F5[Build dense vision embeddings from joined captions]
+        F4 -->|No| F6[Skip vision embedding for that segment]
+        F2 --> F7[Persist BM25 index to db/bm25.pkl]
+        F3 --> F8[Store text embeddings in ChromaDB text_segments]
+        F5 --> F9[Store vision embeddings in ChromaDB vision_segments]
+    end
+
+    G[User asks a question] --> H[main.py initializes AgentState]
+    H --> I[LangGraph workflow starts]
+
+    subgraph AGENT_FLOW[Multi-Agent Reasoning Loop]
+        I --> J[Lead Detective Agent]
+        J --> J1[Read query + current evidence + confidence + contradictions]
+        J1 --> J2[Break question into 2 to 5 searchable sub-tasks]
+        J2 --> K[Retriever Agent]
+
+        K --> K1[For each sub-task run hybrid_retrieve]
+        K1 --> K2[Aggregate evidence across sub-tasks]
+        K2 --> K3[Early deduplication by segment_id]
+        K3 --> L[Verifier Agent]
+
+        L --> L1[Deduplicate evidence again]
+        L1 --> L2[Compute average rerank score]
+        L2 --> L3[LLM checks evidence quality and contradictions]
+        L3 --> L4[Compute adjusted confidence score]
+        L4 --> M{Confidence >= threshold or max loops reached?}
+
+        M -->|No| J
+        M -->|Yes| N[Scribe Agent]
+        N --> N1[Sort verified evidence by rerank_score]
+        N1 --> N2[Take top evidence segments]
+        N2 --> N3[Write forensic Markdown report]
+        N3 --> N4[Append metadata: confidence / evidence count / iterations]
+        N4 --> O[Final answer + report returned]
+    end
+
+    subgraph HYBRID[Detailed Hybrid Retrieval for each sub-task]
+        K1 --> R1[Detect query type: emotion / temporal / speaker]
+        R1 --> R2[Expand query synonyms for BM25 if useful]
+        R2 --> R3[BM25 sparse search on combined_text]
+        R2 --> R4[Dense semantic search on ChromaDB text collection]
+        R2 --> R5[Dense semantic search on ChromaDB vision collection]
+        R3 --> R6[RRF fusion of ranked lists]
+        R4 --> R6
+        R5 --> R6
+        R6 --> R7[Build top candidate pool]
+        R7 --> R8[Cross-encoder reranking]
+        R8 --> R9{Emotion query?}
+        R9 -->|Yes| R10[Boost segments with stronger emotion metadata]
+        R9 -->|No| R11[No emotion boost]
+        R10 --> R12{Temporal query?}
+        R11 --> R12
+        R12 -->|Yes| R13[Add adjacent +/-1 segments for context]
+        R12 -->|No| R14[Keep top reranked results]
+        R13 --> R15[Return final evidence segments]
+        R14 --> R15
+    end
+
+    subgraph STORAGE[Stored Data]
+        S1[data/records JSON records]
+        S2[db/bm25.pkl]
+        S3[ChromaDB text_segments]
+        S4[ChromaDB vision_segments]
+        S5[reports/ saved Markdown reports]
+    end
+
+    E9 --> S1
+    F7 --> S2
+    F8 --> S3
+    F9 --> S4
+    N4 --> S5
+
+    S2 --> R3
+    S3 --> R4
+    S4 --> R5
+    S1 -. fallback if dense data missing .-> R7
+```
 
 ## Agentic RAG Engine
 
@@ -326,11 +457,11 @@ python main.py "What strategies were discussed?" --max-iter 3
 
 ## Roadmap
 
-- [ ] Streaming real-time ingestion (RTMP/HLS)
-- [ ] Knowledge Graph RAG (entity relationship mapping)
-- [ ] Intelligent scene boundary detection (replace fixed 10s chunks)
-- [ ] Multi-video cross-analysis queries
-- [ ] Desktop app packaging (Electron + PyInstaller)
+- [ ] Streaming real-time ingestion (RTMP/HLS).
+- [ ] Knowledge Graph RAG (entity relationship mapping).
+- [ ] Intelligent scene boundary detection (replace fixed 10s chunks).
+- [ ] Multi-video cross-analysis queries.
+- [ ] Desktop app packaging (Electron + PyInstaller).
 
 ---
 

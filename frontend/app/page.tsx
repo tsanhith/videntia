@@ -32,8 +32,8 @@ export default function Home() {
       setSelectedVideo(saved);
     }
 
-    fetch("http://localhost:8000/api/videos")
-      .then((res) => res.json())
+    videosApi
+      .list()
       .then((data) => {
         if (data.videos) {
           setExistingVideos(data.videos);
