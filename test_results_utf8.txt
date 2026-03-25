@@ -1,0 +1,584 @@
+﻿
+--- Test: Exact 
+Substring Match ---
+Query: 'the domestic 
+implications of it as 
+well as what the allies
+in the region'
+  Query type: 
+emotion=False, 
+temporal=False, 
+speaker=False
+  BM25: 50 results
+  Dense text: 50 
+results
+  Candidates after RRF:
+20
+  -> Returning 3 
+segments
+  Result 1 (Score: 
+0.791): the United 
+States is going to or 
+Trump administration is
+going to have to worry 
+about the domestic 
+implications of it as 
+well as what the allies
+in the region are 
+saying. >> Bman, as a 
+strikes ramp up, so 
+does the rhetoric in 
+all of this. We've been
+hearing again from 
+Secretary of Defense 
+for the United States 
+Pete Hexith using 
+strong language. Um I 
+quote, he's uh saying 
+that the US will 
+control Iran and 
+control it soon. Um can
+Iran ever really be 
+under control under the
+control of the United 
+States? >> It's hard to
+get into the minds of 
+this administration's 
+officials um especially
+when they speak in such
+bravado. So uh we heard
+similar language used 
+about Venezuela. We 
+will control the oil. 
+We will take you know 
+uh take the oil even. 
+Um but the reality is 
+this is a country of 90
+million people. It's 
+very diverse. uh and 
+short of entering with 
+ground forces, it's 
+unclear what the 
+bombardment alone will 
+accomplish. Um it will 
+obviously deprive the 
+regime of many of its
+  Result 2 (Score: 
+0.791): the United 
+States is going to or 
+Trump administration is
+going to have to worry 
+about the domestic 
+implications of it as 
+well as what the allies
+in the region are 
+saying. >> Bman, as a 
+strikes ramp up, so 
+does the rhetoric in 
+all of this. We've been
+hearing again from 
+Secretary of Defense 
+for the United States 
+Pete Hexith using 
+strong language. Um I 
+quote, he's uh saying 
+that the US will 
+control Iran and 
+control it soon. Um can
+Iran ever really be 
+under control under the
+control of the United 
+States? >> It's hard to
+get into the minds of 
+this administration's 
+officials um especially
+when they speak in such
+bravado. So uh we heard
+similar language used 
+about Venezuela. We 
+will control the oil. 
+We will take you know 
+uh take the oil even. 
+Um but the reality is 
+this is a country of 90
+million people. It's 
+very diverse. uh and 
+short of entering with 
+ground forces, it's 
+unclear what the 
+bombardment alone will 
+accomplish. Um it will 
+obviously deprive the 
+regime of many of its
+  Result 3 (Score: 
+0.612): have to throw 
+everything at it from 
+the very get-go. The 
+strategy is obviously 
+for them increasing 
+pressure on global 
+energy supply and 
+making everybody else 
+pay. The definition of 
+victory for them is 
+survival. It's not 
+military victory 
+because that's 
+obviously impossible. U
+versus United States 
+and Israel jointly. Uh 
+so how do you survive 
+is that you increase 
+the cost and stay in 
+power until the 
+calculus changes in 
+Washington. uh that 
+this is going too long,
+that this is too costly
+and obviously the 
+United States is going 
+to or Trump 
+administration is going
+to have to worry about 
+the domestic 
+implications of it as 
+well as what the allies
+in the region are 
+saying. >> Bman, as a 
+strikes ramp up, so 
+does the rhetoric in 
+all of this. We've been
+hearing again from 
+Secretary of Defense 
+for the United States 
+Pete Hexith using 
+strong language. Um I 
+quote, he's uh saying 
+that the US will 
+control Iran and 
+control it soon. Um can
+Iran ever really be 
+under control under the
+control of
+
+--- Test: Semantic 
+Inference (Entities) 
+---
+Query: 'what are they 
+saying about Israel and
+Arab countries?'
+  Query type: 
+emotion=False, 
+temporal=False, 
+speaker=False
+  BM25: 50 results
+  Dense text: 50 
+results
+  Candidates after RRF:
+20
+  -> Returning 3 
+segments
+  Result 1 (Score: 
+0.091): strikes. What 
+have you made of the 
+strategy they're using 
+thus far? >> A lot of 
+observers thought that 
+if this war started 
+that Iran at some point
+later on will start 
+targeting Arab 
+countries and some 
+people were surprised 
+how quickly they got 
+there. So, I think that
+shows that they thought
+of this immediately as 
+a war of survival. Um 
+obviously targeting of 
+the supreme leader and 
+the entire upper 
+echelon of the military
+uh gave them the 
+impression that this is
+a war of a regime 
+change. Therefore they 
+have to throw 
+everything at it from 
+the very get-go. The 
+strategy is obviously 
+for them increasing 
+pressure on global 
+energy supply and 
+making everybody else 
+pay. The definition of 
+victory for them is 
+survival. It's not 
+military victory 
+because that's 
+obviously impossible. U
+versus United States 
+and Israel jointly. Uh 
+so how do you survive 
+is that you increase 
+the cost and stay in 
+power until the 
+calculus changes in 
+Washington. uh that 
+this is going too long,
+that this is too costly
+and obviously
+  Result 2 (Score: 
+0.091): strikes. What 
+have you made of the 
+strategy they're using 
+thus far? >> A lot of 
+observers thought that 
+if this war started 
+that Iran at some point
+later on will start 
+targeting Arab 
+countries and some 
+people were surprised 
+how quickly they got 
+there. So, I think that
+shows that they thought
+of this immediately as 
+a war of survival. Um 
+obviously targeting of 
+the supreme leader and 
+the entire upper 
+echelon of the military
+uh gave them the 
+impression that this is
+a war of a regime 
+change. Therefore they 
+have to throw 
+everything at it from 
+the very get-go. The 
+strategy is obviously 
+for them increasing 
+pressure on global 
+energy supply and 
+making everybody else 
+pay. The definition of 
+victory for them is 
+survival. It's not 
+military victory 
+because that's 
+obviously impossible. U
+versus United States 
+and Israel jointly. Uh 
+so how do you survive 
+is that you increase 
+the cost and stay in 
+power until the 
+calculus changes in 
+Washington. uh that 
+this is going too long,
+that this is too costly
+and obviously
+  Result 3 (Score: 
+0.091): strikes. What 
+have you made of the 
+strategy they're using 
+thus far? >> A lot of 
+observers thought that 
+if this war started 
+that Iran at some point
+later on will start 
+targeting Arab 
+countries and some 
+people were surprised 
+how quickly they got 
+there. So, I think that
+shows that they thought
+of this immediately as 
+a war of survival. Um 
+obviously targeting of 
+the supreme leader and 
+the entire upper 
+echelon of the military
+uh gave them the 
+impression that this is
+a war of a regime 
+change. Therefore they 
+have to throw 
+everything at it from 
+the very get-go. The 
+strategy is obviously 
+for them increasing 
+pressure on global 
+energy supply and 
+making everybody else 
+pay. The definition of 
+victory for them is 
+survival. It's not 
+military victory 
+because that's 
+obviously impossible. U
+versus United States 
+and Israel jointly. Uh 
+so how do you survive 
+is that you increase 
+the cost and stay in 
+power until the 
+calculus changes in 
+Washington. uh that 
+this is going too long,
+that this is too costly
+and obviously
+
+--- Test: Semantic 
+Inference 
+(Emotions/Contrasts) 
+---
+Query: 'Are people 
+celebrating or worried 
+about bombs?'
+  Query type: 
+emotion=True, 
+temporal=False, 
+speaker=False
+  BM25: 50 results
+  Dense text: 50 
+results
+  Candidates after RRF:
+20
+  Applying emotion 
+boosting
+  -> Returning 3 
+segments
+  Result 1 (Score: 
+1.131): the other isn't
+telling the entire 
+story. Um, and 
+socioeconomics plays a 
+role. Their proximity 
+to bombs plays a role. 
+uh how much they want 
+this regime gone plays 
+a role on how they 
+feel. So we have people
+who were celebrating in
+the first day um and 
+we're hopeful that this
+will result in regime 
+collapse. As time goes 
+by and that doesn't 
+happen and the cost of 
+civilians increases and
+daily life is 
+completely interrupted,
+the very those very 
+same people might shift
+their views. Um, we've 
+had people on the other
+end who always opposed 
+foreign intervention 
+who didn't like the 
+fact the United States 
+came in took out the 
+leadership even though 
+some of them despise 
+the leadership because 
+it basically in their 
+view it wasn't anybody 
+else's job to come in 
+and do so. We have just
+heard CNN reporting the
+CIA has been training 
+or working with Kurdish
+forces in Iraq to send 
+them through Iran and 
+create a buffer zone. 
+Um that sends shock 
+waves across Iranian 
+political and social 
+spectrum. There is 
+nothing that unites 
+Iranians more from all 
+sides than Iran's 
+territorial integrity. 
+So the idea that 
+somehow United States 
+is arming ethnic groups
+that might uh result in
+civil war or parts of 
+Iran being separated is
+an very uneasy feeling 
+for a lot of people. So
+maybe among those very 
+people who want the 
+regime change suddenly 
+look at that and start 
+worrying about where 
+this is all going. And 
+therefore, are there 
+fears that this could 
+have parallels with 
+what has happened in 
+Gaza in terms of the 
+length of time it has 
+gone on for
+  Result 2 (Score: 
+1.131): the other isn't
+telling the entire 
+story. Um, and 
+socioeconomics plays a 
+role. Their proximity 
+to bombs plays a role. 
+uh how much they want 
+this regime gone plays 
+a role on how they 
+feel. So we have people
+who were celebrating in
+the first day um and 
+we're hopeful that this
+will result in regime 
+collapse. As time goes 
+by and that doesn't 
+happen and the cost of 
+civilians increases and
+daily life is 
+completely interrupted,
+the very those very 
+same people might shift
+their views. Um, we've 
+had people on the other
+end who always opposed 
+foreign intervention 
+who didn't like the 
+fact the United States 
+came in took out the 
+leadership even though 
+some of them despise 
+the leadership because 
+it basically in their 
+view it wasn't anybody 
+else's job to come in 
+and do so. We have just
+heard CNN reporting the
+CIA has been training 
+or working with Kurdish
+forces in Iraq to send 
+them through Iran and 
+create a buffer zone. 
+Um that sends shock 
+waves across Iranian 
+political and social 
+spectrum. There is 
+nothing that unites 
+Iranians more from all 
+sides than Iran's 
+territorial integrity. 
+So the idea that 
+somehow United States 
+is arming ethnic groups
+that might uh result in
+civil war or parts of 
+Iran being separated is
+an very uneasy feeling 
+for a lot of people. So
+maybe among those very 
+people who want the 
+regime change suddenly 
+look at that and start 
+worrying about where 
+this is all going. And 
+therefore, are there 
+fears that this could 
+have parallels with 
+what has happened in 
+Gaza in terms of the 
+length of time it has 
+gone on for
+  Result 3 (Score: 
+0.944): military tools,
+but it does not mean 
+that they will fall 
+anytime soon because of
+it. No aerial 
+bombardment in the 
+history has alone 
+resulted in a regime 
+collapse like this. 
+Everybody in this 
+administration almost 
+gives a different 
+definition of what the 
+point of this is and 
+what is the end goal 
+and when is it that 
+they can declare 
+victory and go home. Is
+it regime change? Is it
+controlling Iran? Is it
+uh the nuclear program 
+which they themselves 
+said was obliterated 8 
+months ago? Um is it 
+the missiles? You know,
+it's all of it is very 
+unclear and moving by 
+the day, sometimes by 
+the hour. >> How are 
+Iranian people feeling 
+at this moment? 90 
+million people, like 
+you say, are a huge 
+country and then 
+they're hearing words 
+like, "Well, Iran will 
+be toast and they know 
+it." What can we make 
+of the the the mindset 
+of Iranians who are 
+having to experience 
+and live through this? 
+>> I mean, but the fact
+of 90 million means it 
+is not a monolith and 
+anybody who comes and 
+says Iranians feel this
+way or the other isn't 
+telling the entire 
+story. Um, and 
+socioeconomics plays a 
+role. Their proximity 
+to bombs plays a role. 
+uh how much they want 
+this regime gone plays 
+a role on how they 
+feel. So we have people
+who were celebrating in
+the first day um and 
+we're hopeful that this
+will result in regime 
+collapse. As time goes 
+by and that doesn't 
+happen and the cost of 
+civilians increases and
+daily life is 
+completely interrupted,
+the very those very 
+same people might shift
+their views. Um, we've 
+had people on the other
+end
+
+--- Test: Specific 
+Subject/Location Match 
+---
+Query: 'Did they talk 
+about Kurdish forces in
+Iraq?'
+  Query type: 
+emotion=False, 
+temporal=False, 
+speaker=False
+  BM25: 50 results
+  Dense text: 50 
+results
+  Candidates after RRF:
+20

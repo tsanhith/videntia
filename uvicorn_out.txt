@@ -1,0 +1,774 @@
+INFO:     127.0.0.1:62940 - "GET /api/videos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62940 - "GET /api/videos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "POST /api/query HTTP/1.1" 200 OK
+DEBUG: Running analyze_video with query='What is Iran's definition of victory in this war' and video_id='ef37f4b3_866b20aa_Iran_s_survival_strategy_against_US_control_Global_News_Podcast_480P'
+
+===============================================================================
+=
+VIDENTIA — Forensic Video Analysis
+===============================================================================
+=
+Query: What is Iran's definition of victory in this war
+Max iterations: 5
+Started: 2026-03-INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+09 11:48:10
+
+
+[DET] Lead Detective -- Iteration 0
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  -> Strategy: To determine Iran's definition of victory, we need to gather and
+analyze statements from Iranian officials, verify existing documents, and 
+analyze military actions to infer potential war objectives.
+    1. Extract and analyze statements from Iranian officials regarding war 
+objectives
+    2. Identify and verify any existing documents or speeches from Iranian 
+leaders discussing war goals
+    3. Analyze Iranian military actions and tactics to infer potential war 
+objectives
+
+[RET] Retriever Agent -- 3 sub-tasks
+  [1/3] Searching: Extract and analyze statements from Iranian officials 
+regarding war objectives...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  Dense text: 50 results
+  Candidates after RRF: 20
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  [green]Reranker loaded on CUDA[/green]
+  -> Returning 8 segments
+    -> Found 8 results, 8 new
+  [2/3] Searching: Identify and verify any existing documents or speeches from 
+Iranian leaders disc...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 2 new
+  [3/3] Searching: Analyze Iranian military actions and tactics to infer 
+potential war objectives...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 1 new
+  Total evidence: 11 segments
+
+[VER] Verifier Agent -- 11 raw segments
+  Unique segments: 11/11
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  LLM confidence: 40.0%
+  Reasoning: The evidence provides context and insights into Iran's response to
+the war, but it does not directly answer the query about Iran's definition of 
+victory in this war. The confidence level is moderate because the evidence is 
+relevant but lacks a clear and direct answer.
+  Final confidence: 71.3%
+
+[DET] Lead Detective -- Iteration 1
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  -> Strategy: Given the current confidence level and the fact that we are 
+still in the early stages of the investigation, it is essential to gather more 
+evidence and refine our understanding of Iran's definition of victory. The 
+sub-tasks outlined above aim to fill gaps in evidence and provide a more 
+comprehensive understanding of the situation.
+    1. Analyze Iranian media coverage of the war to identify any statements or 
+quotes from officials that may clarify their definition of victory
+    2. Review and analyze any existing diplomatic correspondence or 
+communications between Iran and other nations regarding war objectives and 
+potential outcomes
+    3. Conduct a thorough review of Iranian military operations and tactics to 
+identify any patterns or strategies that may indicate a specific definition of 
+victory
+
+[RET] Retriever Agent -- 3 sub-tasks
+  [1/3] Searching: Analyze Iranian media coverage of the war to identify any 
+statements or quotes f...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 4 new
+  [2/3] Searching: Review and analyze any existing diplomatic correspondence or
+communications betw...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 1 new
+  [3/3] Searching: Conduct a thorough review of Iranian military operations and
+tactics to identify...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  -> Returning 8 segments
+    -> Found 8 results, 1 new
+  Total evidence: 17 segments
+
+[VER] Verifier Agent -- 17 raw segments
+  Unique segments: 17/17
+  LLM confidence: 40.0%
+  Reasoning: The evidence segments provide some context about Iran's response 
+to the war, but they do not directly answer the query about Iran's definition 
+of victory in this war. There are no direct contradictions between the 
+segments, but some segments may be interpreted as contradictory if taken out of
+context.
+  [!] Contradictions: 1
+    - Segments 5 and 9 may be interpreted as contradictory if taken out of 
+context
+  Final confidence: 70.1%
+
+[DET] Lead Detective -- Iteration 2
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  -> Strategy: Given the current confidence level and the presence of a 
+contradiction in previous evidence, it is essential to refine our understanding
+of Iran's definition of victory by analyzing specific military operations, 
+casualty reports, and government statements. This will help to identify 
+potential gaps in evidence and provide a more comprehensive understanding of 
+Iran's war objectives.
+    1. Analyze Iranian military operations and tactics to identify any specific
+patterns or strategies that may indicate a definition of victory, focusing on 
+the 1 contradiction identified in previous evidence
+    2. Review and analyze Iranian military casualty reports and losses to 
+identify any potential indicators of a definition of victory, such as 
+acceptable levels of loss or strategic objectives
+    3. Conduct a thorough review of Iranian government statements and speeches 
+from the past year to identify any explicit or implicit definitions of victory 
+in the war
+
+[RET] Retriever Agent -- 3 sub-tasks
+  [1/3] Searching: Analyze Iranian military operations and tactics to identify 
+any specific pattern...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 0 new
+  [2/3] Searching: Review and analyze Iranian military casualty reports and 
+losses to identify any ...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 0 new
+  [3/3] Searching: Conduct a thorough review of Iranian government statements 
+and speeches from the...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 0 new
+  Total evidence: 17 segments
+
+[INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+VER] Verifier Agent -- 17 raw segments
+  Unique segments: 17/17
+  LLM confidence: 40.0%
+  Reasoning: The evidence segments provide some context about Iran's response 
+to the war and its strategy, but they do not directly answer the query about 
+Iran's definition of victory in this war. A more direct answer would require 
+evidence that explicitly discusses Iran's definition of victory in this war.
+  Final confidence: 69.6%
+
+[DET] Lead Detective -- Iteration 3
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  -> Strategy: Given the current confidence level of 69.6% and the fact that we
+are still in iteration 3 out of 5, we need to gather more evidence to refine 
+our understanding of Iran's definition of victory. The previous sub-tasks have 
+provided a good starting point, but we need to analyze the existing evidence 
+more thoroughly and compare the results to identify any gaps or 
+inconsistencies.
+    1. Analyze Iranian military operations and tactics to identify any specific
+patterns or strategies that may indicate a definition of victory, focusing on 
+the 17 verified segments of evidence collected so far
+    2. Review and analyze Iranian military casualty reports and losses to 
+identify any potential indicators of a definition of victory, such as 
+acceptable levels of loss or strategic objectives, and compare the results with
+the previous sub-task's findings
+    3. Conduct a thorough review of Iranian government statements and speeches 
+from the past year to identify any explicit or implicit definitions of victory 
+in the war, and assess the consistency of these definitions with the military 
+operations and casualty reports
+
+[RET] Retriever Agent -- 3 sub-tasks
+  [1/3] Searching: Analyze Iranian military operations and tactics to identify 
+any specific pattern...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 0 new
+  [2/3] Searching: Review and analyze Iranian military casualty reports and 
+losses to identify any ...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+0 new
+  [3/3] Searching: Conduct a thorough review of Iranian government statements 
+and speeches from the...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 1 new
+  Total evidence: 18 segments
+
+[VER] Verifier Agent -- 18 raw segments
+  Unique segments: 18/18
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  LLM confidence: 40.0%
+  Reasoning: The evidence is relevant to the query, but it does not provide a 
+clear answer. The transcripts are more focused on the context and implications 
+of the war rather than Iran's definition of victory.
+  Final confidence: 69.1%
+
+[DET] Lead Detective -- Iteration 4
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  -> Strategy: Given the current confidence level and iteration, further 
+investigation is needed to gather more evidence and refine our understanding of
+Iran's definition of victory. The new sub-tasks aim to fill gaps in evidence by
+analyzing diplomatic efforts, media coverage, and strategic planning documents.
+    1. Analyze Iranian diplomatic efforts and negotiations with other countries
+involved in the war to identify any potential indicators of a definition of 
+victory, such as concessions or agreements, and compare the results with the 
+previous sub-task's findings
+    2. Conduct a thorough review of Iranian media coverage and public opinion 
+to identify any implicit or explicit definitions of victory in the war, and 
+assess the consistency of these definitions with the military operations and 
+government statements
+    3. Review and analyze Iranian strategic planning documents and military 
+doctrine to identify any specific objectives or criteria that may indicate a 
+definition of victory, and compare the results with the previous sub-task's 
+findings
+
+[SCR] Scribe Agent -- Generating report on top 12 segments
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+  -> Saved: 
+C:\Users\abhi\Downloads\project\Agentic_AI\videntia\reports\analysis_20260309_1
+14919.md
+
+===============================================================================
+=
+ANALYSIS COMPLETE
+===============================================================================
+=
+Iterations: 5
+Evidence: 18 segments
+Confidence: 69.07%
+Contradictions: 0
+
+Report:
+### Executive Summary
+
+Iran's definition of victory in this war is survival, not military victory. 
+This is because they believe it's impossible to achieve a military victory 
+against the United States and Israel.
+
+### Key Findings
+
+* The definition of victory for Iran is survival, not military victory, as 
+stated by Bachman Conversy from the BBC's Persian Service: "The definition of 
+victory for them is survival. It's not military victory because that's 
+obviously impossible versus United States and Israel" (1:20–1:30).
+* Iran's strategy is focused on survival, and they have openly telegraphed this
+plan for years, as mentioned by an analyst: "Anybody who has paid any attention
+to Iran's strategy for years, that they have telegraphed this very openly, 
+wasn't a secret, that they will do that" (8:20–8:30).
+* Iranian people's feelings are of unease and worry about the war, with some 
+people fearing that Iran might be separated or parts of it might be under 
+control of the United States, as stated by Bachman Conversy: "There is nothing 
+that unites Iranians more from all sides than Iran's territorial integrity. So 
+the idea that somehow United States is arming ethnic groups that might result 
+in civil war or parts of Iran being separated is very uneasy feeling for a lot 
+of people" (5:50–6:00).
+
+### Emotional Context
+
+The detected emotions in the video include surprise, agreement, disbelief, and 
+unease. The intensity of these emotions varies, but they are mostly moderate to
+high.
+
+### Evidence Details
+
+1. 0:10–0:20: "Israel continue to strike Iran, we take a look at the Iranian 
+response and what exactly is Ted Han's strategy and is the war crucially going 
+beyond Washington's control?"
+2. 1:20–1:30: "The definition of victory for them is survival. It's not 
+military victory because that's obviously impossible versus United States and 
+Israel"
+3. 8:20–8:30: "Anybody who has paid any attention to Iran's strategy for years,
+that they have telegraphed this very openly, wasn't a secret, that they will do
+that"
+4. 5:50–6:00: "There is nothing that unites Iranians more from all sides than 
+Iran's territorial integrity. So the idea that somehow United States is arming 
+ethnic groups that might result in civil war or parts of Iran being separated 
+is very uneasy feeling for a lot of people"
+
+### Contradictions
+
+None found.
+
+---
+**Metadata**
+- Confidence: 69.07%
+- Evidence Segments: 18
+- Iterations: 5
+- Contradictions: 0
+
+INFO:     127.0.0.1:49363 - "GET /api/query/211fd81a-b8b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59841 - "GET /api/videos/ef37f4b3_866b20aa_Iran_s_survival_strategy_against_US_control_Global_News_Podcast_480P/stream HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:57229 - "GET /api/videos/ef37f4b3_866b20aa_Iran_s_survival_strategy_against_US_control_Global_News_Podcast_480P/stream HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:57229 - "GET /api/videos/ef37f4b3_866b20aa_Iran_s_survival_strategy_against_US_control_Global_News_Podcast_480P/stream HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:50762 - "GET /api/videos/ef37f4b3_866b20aa_Iran_s_survival_strategy_against_US_control_Global_News_Podcast_480P/stream HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:53041 - "POST /api/query HTTP/1.1" 200 OK
+DEBUG: Running analyze_video with query='any argument in video?' and video_id='ef37f4b3_866b20aa_Iran_s_survival_strategy_against_US_control_Global_News_Podcast_480P'
+
+===============================================================================
+=INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+
+VIDENTIA — Forensic Video Analysis
+===============================================================================
+=
+Query: any argument in video?
+Max iterations: 5
+Started: 2026-03-09 11:51:11
+
+
+[DET] Lead Detective -- Iteration 0
+  -> Strategy: Initial investigation to gather evidence and increase confidence
+level.
+    1. Analyze audio for potential argumentative tone in the first 30 seconds 
+of the video.
+    2. Identify and verify any raised voices or loud conversations in the 
+video.
+    3. Examine the facial expressions and body language of individuals involved
+in potential confrontations.
+
+[RET] Retriever Agent -- 3 sub-tasks
+  [1/3] Searching: Analyze audio for potential argumentative tone in the first 
+30 seconds of the vi...
+  Query type: emotion=False, temporal=True, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  Adding sliding window context (+-1 segment per match)
+  -> Returning 8 segments
+    -> Found 8 results, 8 new
+  [2/3] Searching: Identify and verify any raised voices or loud conversations 
+in the video....
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 3 new
+  [3/3] Searching: Examine the facial expressions and body language of 
+individuals involved in pote...
+  Query type: emotion=True, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  Applying emotion boosting
+  -> Returning 8 segments
+    -> Found 8 results, 6 new
+  Total evidence: 17 segments
+
+[VER] Verifier Agent -- 17 raw segments
+  Unique segments: 17/17
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+  LLM confidence: 20.0%
+  Reasoning: The evidence does not sufficiently answer the query about the 
+presence of an argument in the video. While the podcast discusses various 
+perspectives and opinions, it does not directly address the query. There are no
+direct contradictions between segments, but some segments may seem to be 
+discussing different aspects of the same topic.
+  Final confidence: 56.4%
+
+[DET] Lead Detective -- Iteration 1
+  -> Strategy: Given the current confidence level and the fact that we are 
+still in the early iterations, it's essential to gather more evidence to 
+support or refute the presence of an argument in the video. The refined 
+sub-tasks will help us fill the gaps in evidence and provide a more 
+comprehensive understanding of the situation.
+    1. Analyze the video for any visual cues of aggression, such as clenched 
+fists or pointing fingers, in the remaining 80% of the video.
+    2. Verify the presence of any raised voices or loud conversations in the 
+second half of the video, using the verified evidence from the first half as a 
+reference.
+    3. Examine the video for any non-verbal cues of discomfort or tension, such
+as crossing arms or avoiding eye contact, in the individuals involved in 
+potential confrontations.
+
+[RET] Retriever Agent -- 3 sub-tasks
+  [1/3] Searching: Analyze the video for any visual cues of aggression, such as
+clenched fists or p...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 3 new
+  [2/3] Searching: Verify the presence of any raised voices or loud 
+conversations in the second hal...
+  Query type: emotion=False, temporal=True, speaker=False
+  BM25: 50 results
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+  Dense text: 50 results
+  Candidates after RRF: 20
+  Adding sliding window context (+-1 segment per match)
+  -> Returning 8 segments
+    -> Found 8 results, 1 new
+  [3/3] Searching: Examine the video for any non-verbal cues of discomfort or 
+tension, such as cros...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 0 new
+  Total evidence: 21 segments
+
+[VER] Verifier Agent -- 21 raw segments
+  Unique segments: 21/21
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+  LLM confidence: 40.0%
+  Reasoning: The evidence provides some insight into the discussion and 
+emotions expressed in the video, but it's not a clear or direct answer to the 
+query. The inconsistencies in tone and emotions also reduce the confidence 
+level.
+  [!] Contradictions: 1
+    - Inconsistencies in tone and emotions expressed across segments
+  Final confidence: 64.5%
+
+[DET] Lead Detective -- Iteration 2
+  -> Strategy: Given the current confidence level and the presence of 
+contradictions, it's essential to investigate further to identify potential 
+arguments or disagreements in the remaining video segments. Refining the 
+sub-tasks will help fill gaps in evidence and provide a more comprehensive 
+understanding of the situation.
+    1. Analyze the audio for any potential arguments or disagreements in the 
+remaining 19% of the video, focusing on the 1% of the video where 
+contradictions were found.
+    2. Verify the presence of any non-verbal cues of discomfort or tension in 
+the individuals involved in potential confrontations, using the verified 
+evidence from the previous iterations as a reference.
+    3. Examine the video for any visual cues of aggression or defensiveness in 
+the individuals involved in potential confrontations, such as crossing arms or 
+avoiding eye contact, in the second half of the video.
+
+[RET] Retriever Agent -- 3 sub-tasks
+  [1/3] Searching: Analyze the audio for any potential arguments or 
+disagreements in the remaining ...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 1 new
+  [2/3] Searching: Verify the presence of any non-verbal cues of discomfort or 
+tension in the indiv...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 0 new
+  [3/3] Searching: Examine the video for any visual cues of aggression or 
+defensiveness in the indi...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 1 new
+  Total evidence: 23 segments
+
+[VER] Verifier Agent -- 23 raw segments
+  Unique segments: 23/23
+  LLM confidence: 60.0%
+  Reasoning: The evidence is somewhat relevant to the query, but it's not a 
+direct answer. The query is not explicitly addressed, but there are hints of 
+arguments or differing opinions. There are no major contradictions between 
+segments, but there are some minor inconsistencies.
+  Final confidence: 72.5%
+
+[DET] Lead Detective -- Iteration 3
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+  -> Strategy: Given the high confidence level and the fact that we are already
+in the third iteration, it's essential to refine our sub-tasks to fill gaps in 
+evidence. We need to analyze the remaining 19% of the video, focusing on the 
+areas where non-verbal cues of discomfort or tension were found. Additionally, 
+we should examine the first half of the video for visual cues of aggression or 
+defensiveness and verify any temporal patterns that may indicate a progression 
+of tension or conflict.
+    1. Analyze the audio for any potential arguments or disagreements in the 
+remaining 19% of the video, focusing on the 2% of the video where non-verbal 
+cues of discomfort or tension were found.
+    2. Examine the video for any visual cues of aggression or defensiveness in 
+the individuals involved in potential confrontations, such as crossing arms or 
+avoiding eye contact, in the first half of the video.
+    3. Verify the presence of any temporal patterns in the video, such as a 
+sequence of events that may indicate a progression of tension or conflict, 
+using the verified evidence from the previous iterations as a reference.
+
+[RET] Retriever Agent -- 3 sub-tasks
+  [1/3] Searching: Analyze the audio for any potential arguments or 
+disagreements in the remaining ...
+  Query type: emotion=False, temporal=False, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  -> Returning 8 segments
+    -> Found 8 results, 0 new
+  [2/3] Searching: Examine the video for any visual cues of aggression or 
+defensiveness in the indi...
+  Query type: emotion=False, temporal=True, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+  Candidates after RRF: 20
+  Adding sliding window context (+-1 segment per match)
+  -> Returning 8 segments
+    -> Found 8 results, 1 new
+  [3/3] Searching: Verify the presence of any temporal patterns in the video, 
+such as a sequence of...
+  Query type: emotion=False, temporal=True, speaker=False
+  BM25: 50 results
+  Dense text: 50 results
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+  Candidates after RRF: 20
+  Adding sliding window context (+-1 segment per match)
+  -> Returning 8 segments
+    -> Found 8 results, 1 new
+  Total evidence: 25 segments
+
+[VER] Verifier Agent -- 25 raw segments
+  Unique segments: 25/25
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+  LLM confidence: 30.0%
+  Reasoning: The evidence does not directly answer the query, and some segments
+have low scores, indicating potential inconsistencies or irrelevance.
+  Final confidence: 60.1%
+
+[DET] Lead Detective -- Iteration 4
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+  -> Strategy: Given the current confidence level and iteration number, it's 
+essential to continue investigating the video to gather more evidence and 
+refine our understanding of any potential arguments or disagreements. The 
+sub-tasks provided focus on analyzing the remaining video segments, examining 
+visual cues, and verifying temporal patterns to identify any gaps or 
+inconsistencies in the evidence.
+    1. Analyze the audio for any potential arguments or disagreements in the 
+remaining 21% of the video, focusing on the 3% of the video where non-verbal 
+cues of discomfort or tension were found, and compare the results with the 
+previous 2% of the video.
+    2. Examine the video for any visual cues of aggression or defensiveness in 
+the individuals involved in potential confrontations, such as crossing arms or 
+avoiding eye contact, in the second half of the video, to identify any patterns
+or inconsistencies.
+    3. Verify the presence of any temporal patterns in the video, such as a 
+sequence of events that may indicate a progression of tension or conflict, 
+using the verified evidence from the previous iterations as a reference, and 
+compare the results with the previous sub-tasks to identify any gaps or 
+inconsistencies.
+
+[SCR] Scribe Agent -- Generating report on top 12 segments
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+  -> Saved: 
+C:\Users\abhi\Downloads\project\Agentic_AI\videntia\reports\analysis_20260309_1
+15200.md
+
+===============================================================================
+=
+ANALYSIS COMPLETE
+===============================================================================
+=
+Iterations: 5
+Evidence: 25 segments
+Confidence: 60.11%
+Contradictions: 0
+
+Report:
+### Executive Summary
+There is an argument in the video about the implications of the conflict in the
+region, with some voices suggesting that it may be similar to other conflicts 
+and others expressing surprise at the length of time it has gone on for and the
+number of civilian casualties.
+
+### Key Findings
+* Some voices in the region think that the conflict is starting to look very 
+similar to other conflicts in the region (2:10–2:20).
+* The bombardment alone may not accomplish much, and it will deprive the regime
+of many of its military tools (3:00–3:10).
+* The conflict could have parallels with what is happening in Gaza in terms of 
+the length of time it has gone on for and also the number of civilian 
+casualties and deaths that we've seen (6:20–6:30).
+* Some people in Iran are begging their leaders to move for the time being, but
+their response is like no (6:50–7:00).
+* The Americans were not necessarily prepared for the day after the conflict 
+started, and there was no plan to evacuate them (8:40–8:50).
+
+### Emotional Context
+Agreement and surprise were detected in several segments, with an intensity of 
+0.80 and 0.40 respectively. The emotions were most intense in segments 1, 7, 
+and 9.
+
+### Evidence Details
+1. Segment 1 (Time: 6:40–6:50) - Transcript: "go that far, but there are 
+absolutely voices who would say, okay, this is starting to look very similar to
+a number of other conflicts in the region."
+2. Segment 2 (Time: 2:30–2:40) - Transcript: "It's hard to get into the minds 
+of this administration's officials, especially when they speak in such 
+bravado."
+3. Segment 3 (Time: 8:00–8:10) - Transcript: "and what they've outlined in 
+terms of those, let's say speculative numbers of four to five weeks and it all 
+being resolved by then."
+4. Segment 4 (Time: 5:00–5:10) - Transcript: "and daily life is completely 
+interrupted. Those very same people might shift their views."
+5. Segment 5 (Time: 1:00–1:10) - Transcript: "Obviously, targeting of the 
+Supreme Leader and the entire upper echelon of the military gave them the 
+impression that this is a war of regime change."
+6. Segment 6 (Time: 3:00–3:10) - Transcript: "people. It's very diverse and 
+short of entering with ground forces, it's unclear what the bombardment alone 
+will accomplish."
+7. Segment 7 (Time: 6:30–6:40) - Transcript: "and deaths that we've seen. 
+People in sort of maybe self-defense mechanism don't want to think that and 
+don't want to go that far, but there are absolutely voices who would say, okay,
+this is starting to"
+8. Segment 8 (Time: 6:50–7:00) - Transcript: "I included so I don't think a lot
+of people in Iran I just spoke to family about 30 minutes ago begging them to 
+like move for the time being and their response is like no"
+9. Segment 9 (Time: 6:20–6:30) - Transcript: "And therefore, I'll say that this
+could have parallels with what is happening in Gaza in terms of the length of 
+time it has gone on for and also the number of civilian casualties and deaths 
+that we've seen."
+10. Segment 10 (Time: 0:40–0:50) - Transcript: "using thus far? A lot of 
+observers thought that if this war started that Iran at some point later on 
+will start targeting Arab countries and some people will surprise how quickly 
+they got there."
+11. Segment 11 (Time: 8:40–8:50) - Transcript: "And the way the Americans are, 
+American citizens are stuck in the region and there was no plan to evacuate 
+them."
+12. Segment 12 (Time: 0:50–1:00) - Transcript: "there. So I think that shows 
+that they thought of this immediately as a war of survival."
+
+### Contradictions
+None found.
+
+---
+**Metadata**
+- Confidence: 60.11%
+- Evidence Segments: 25
+- Iterations: 5
+- Contradictions: 0
+
+INFO:     127.0.0.1:53041 - "GET /api/query/31811ab5-39c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50950 - "GET /api/videos/ef37f4b3_866b20aa_Iran_s_survival_strategy_against_US_control_Global_News_Podcast_480P/stream HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:60582 - "GET /api/videos/ef37f4b3_866b20aa_Iran_s_survival_strategy_against_US_control_Global_News_Podcast_480P/stream HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:60582 - "GET /api/videos/ef37f4b3_866b20aa_Iran_s_survival_strategy_against_US_control_Global_News_Podcast_480P/stream HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:61319 - "GET /api/videos/ef37f4b3_866b20aa_Iran_s_survival_strategy_against_US_control_Global_News_Podcast_480P/stream HTTP/1.1" 206 Partial Content
